@@ -11,7 +11,7 @@ int boutonUP;
 int boutonDOWN;
 int boutonENTER;
 int potentio;
-const int RecepteurIR;
+int RecepteurIR;
 
 int compteurflechemenu=0;
 int nbOPT=2;
