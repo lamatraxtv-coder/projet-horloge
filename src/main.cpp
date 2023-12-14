@@ -57,28 +57,33 @@ void loop(){
   //affichage sur le display
   switch(compteurflechemenu){
     case 0:
+      display.clearDisplay();
       display.println("->alumer // eteindre l'horloge");
-      display.println("  activer // desactvier un reveil");
+      display.println("  activer // desactvier un reveil");   
       display.println("  AM/PM");
       display.display();
       break;
     case 1:
+      display.clearDisplay();
       display.println("  alumer // eteindre l'horloge");
       display.println("->activer // desactvier un reveil");
       display.println("  AM/PM");
       display.display();
       break;
     case 2:
+      display.clearDisplay();
       display.println("  alumer // eteindre l'horloge");
       display.println("  activer // desactvier un reveil");
       display.println("->AM/PM");
       display.display();
       break;
   }
+  display.clearDisplay();
+
   if(compteurflechemenu==0 && boutonENTER==HIGH){
     //interuption systeme
   }
-  if(compteurflechemenu==1 && boutonENTER==HIGH){
+  if(compteurflechemenu==1 && boutonENTER==HIGH){         //selection de choix sur le menu
     //entré paramétrage du reveil
   }
   if(compteurflechemenu==2 && boutonENTER==HIGH){
