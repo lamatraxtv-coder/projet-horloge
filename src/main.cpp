@@ -2,23 +2,40 @@
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
 #include <Wire.h>
+#include <IRremote.h>
 
 #define largeurMENU 128
 #define hauteurMENU 64
 
+int boutonUP;
+int boutonDOWN;
+int potentio;
+const int RecepteurIR;
+
 //declaration de l'écran connecté en I2C
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire,-1);
+
+//init de la transmission par telecomande
+IRrecv irrecv(RecepteurIR);
+decode_results DonneRecue;
+
 void setup(){
-  Serial.begin(115200);
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)){
+  Serial.begin(115200);                               //debut de l'afficheur serie
+  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)){     
     Serial.println(F("SSD1306 allocation failed"));
     for(;;);
   }
-  display.setTextSize(1);
+  irrecv.enableIRIn();                                 //activation de la telecomande
+  irrecv.blink13(true);                               
+
+  display.setTextSize(1);                              //mode defaut du display
   display.setTextColor(WHITE);
   display.setCursor(0,0);
-  display.print("starting device.");display.print("starting device..");display.print("starting device...");
+  display.print("starting device."); delay(1000);display.print("starting device..");delay(1000);display.print("starting device..."); delay(1000);
   display.display();
   delay(4000);
+
+}
+void loop(){
 
 }
