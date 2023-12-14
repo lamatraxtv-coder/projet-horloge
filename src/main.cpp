@@ -12,6 +12,7 @@ int boutonDOWN;
 int boutonENTER;
 int potentio;
 int RecepteurIR;
+int LEDdecompteur;
 
 int compteurflechemenu=0;
 int nbOPT=2;
@@ -24,6 +25,11 @@ IRrecv irrecv(RecepteurIR);
 decode_results DonneRecue;
 
 void setup(){
+  pinMode(boutonDOWN, INPUT);
+  pinMode(boutonENTER, INPUT);
+  pinMode(boutonUP, INPUT);
+  pinMode(potentio, INPUT);
+  pinMode(LEDdecompteur,OUTPUT);
   Serial.begin(115200);                               //debut de l'afficheur serie
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)){     
     Serial.println(F("SSD1306 allocation failed"));
@@ -38,7 +44,6 @@ void setup(){
   display.print("starting device."); delay(1000);display.print("starting device..");delay(1000);display.print("starting device..."); delay(1000);
   display.display();
   delay(4000);
-
 }
 void loop(){
   //logic pour fleche sur display
