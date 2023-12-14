@@ -92,6 +92,6 @@ void loop(){
     //entré paramétrage du reveil
   }
   if(compteurflechemenu==2 && boutonENTER==HIGH){
-    //changement de mode d'affichage
+    //changement de mode d'affichage AM/PM
   }
 }
