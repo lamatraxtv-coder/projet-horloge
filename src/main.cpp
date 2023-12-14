@@ -75,4 +75,13 @@ void loop(){
       display.display();
       break;
   }
+  if(compteurflechemenu==0 && boutonENTER==HIGH){
+    //interuption systeme
+  }
+  if(compteurflechemenu==1 && boutonENTER==HIGH){
+    //entré paramétrage du reveil
+  }
+  if(compteurflechemenu==2 && boutonENTER==HIGH){
+    //changement de mode d'affichage
+  }
 }
