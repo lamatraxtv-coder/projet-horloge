@@ -7,14 +7,14 @@
 #define largeurMENU 128
 #define hauteurMENU 64
 
-int boutonUP;
+int boutonUP;                 
 int boutonDOWN;
 int boutonENTER;
 int potentio;
 const int RecepteurIR;
 
 int compteurflechemenu=0;
-int nbOPT=4;
+int nbOPT=2;
 
 //declaration de l'écran connecté en I2C
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire,-1);
@@ -68,12 +68,6 @@ void loop(){
       display.println("  alumer // eteindre l'horloge");
       display.println("  activer // desactvier un reveil");
       display.println("->AM/PM");
-      break;
-    case 3:
-      display.print("     essaie");
-      break;
-    case 4:
-      display.print("     essaie");
       break;
   }
 }
