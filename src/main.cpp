@@ -9,8 +9,12 @@
 
 int boutonUP;
 int boutonDOWN;
+int boutonENTER;
 int potentio;
 const int RecepteurIR;
+
+int compteurflechemenu=0;
+int nbOPT=4;
 
 //declaration de l'écran connecté en I2C
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire,-1);
@@ -37,5 +41,33 @@ void setup(){
 
 }
 void loop(){
-
+  if(boutonUP==HIGH){
+    compteurflechemenu++;
+  }
+  if(boutonDOWN==HIGH){
+    compteurflechemenu--;
+  }
+  if(compteurflechemenu>nbOPT){
+    compteurflechemenu=0;
+  }
+  if(compteurflechemenu<0){
+    compteurflechemenu=nbOPT;
+  }
+  switch(compteurflechemenu){
+    case 0:
+      display.print("     essaie");
+      break;
+    case 1:
+      display.print("     essaie");
+      break;
+    case 2:
+      display.print("     essaie");
+      break;
+    case 3:
+      display.print("     essaie");
+      break;
+    case 4:
+      display.print("     essaie");
+      break;
+  }
 }
