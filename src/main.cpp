@@ -41,33 +41,38 @@ void setup(){
 
 }
 void loop(){
+  //logic pour fleche sur display
   if(boutonUP==HIGH){
-    compteurflechemenu++;
+    compteurflechemenu++;           //si on appuie sur le bouton up alors la fleche monte
   }
-  if(boutonDOWN==HIGH){
+  if(boutonDOWN==HIGH){             //si on appuie sur le bouton down alors la fleche descend
     compteurflechemenu--;
   }
-  if(compteurflechemenu>nbOPT){
+  if(compteurflechemenu>nbOPT){     //si la fleche depasse le nb d'option elle retourne en haut de la selection
     compteurflechemenu=0;
   }
-  if(compteurflechemenu<0){
+  if(compteurflechemenu<0){         // si la fleche tente de depasser la premiere option alors elle va à la derniere option
     compteurflechemenu=nbOPT;
   }
+  //affichage sur le display
   switch(compteurflechemenu){
     case 0:
       display.println("->alumer // eteindre l'horloge");
       display.println("  activer // desactvier un reveil");
       display.println("  AM/PM");
+      display.display();
       break;
     case 1:
       display.println("  alumer // eteindre l'horloge");
       display.println("->activer // desactvier un reveil");
       display.println("  AM/PM");
+      display.display();
       break;
     case 2:
       display.println("  alumer // eteindre l'horloge");
       display.println("  activer // desactvier un reveil");
       display.println("->AM/PM");
+      display.display();
       break;
   }
 }
