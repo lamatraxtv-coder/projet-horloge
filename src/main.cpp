@@ -55,13 +55,19 @@ void loop(){
   }
   switch(compteurflechemenu){
     case 0:
-      display.print("     essaie");
+      display.println("->alumer // eteindre l'horloge");
+      display.println("  activer // desactvier un reveil");
+      display.println("  AM/PM");
       break;
     case 1:
-      display.print("     essaie");
+      display.println("  alumer // eteindre l'horloge");
+      display.println("->activer // desactvier un reveil");
+      display.println("  AM/PM");
       break;
     case 2:
-      display.print("     essaie");
+      display.println("  alumer // eteindre l'horloge");
+      display.println("  activer // desactvier un reveil");
+      display.println("->AM/PM");
       break;
     case 3:
       display.print("     essaie");
