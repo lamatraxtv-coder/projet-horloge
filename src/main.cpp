@@ -7,12 +7,15 @@
 #define largeurMENU 128
 #define hauteurMENU 64
 
+/*à mettre sur la breadboard : un objet permettant de bloquer l'alim de la matrice 
+*/
 int boutonUP;                 
 int boutonDOWN;
 int boutonENTER;
 int potentio;
 int RecepteurIR;
 int LEDdecompteur;
+int alimmatrice = HIGH;
 
 int compteurflechemenu=0;
 int nbOPT=2;
@@ -52,18 +55,31 @@ void setup(){
 void marchearret(){                                         //fonction permettant l'allumage de l'horloge
   display.println("vous avez appuyé sur le bouton de marche arret");
   display.display();
+  display.clearDisplay();
+  delay(1000);
+
+  switch(alimmatrice){
+
+    case HIGH :
+      alimmatrice = LOW;
+    
+    case LOW : 
+      alimmatrice = HIGH;
+  }
+
+  loop();
 
 }
 void reveil(){                                               //fonction permettant activation d'un reveil personalisé      
   display.println("vous avez appuyé sur le bouton d'activation et de desactivation du reveil");
   display.display();
+  loop();
 }
 void modeAMPM(){                                              //fonction permettant de changer le mode d'afficahge de l'horloge. 
   display.println("vous avez appuyé sur le bouton du mode d'affichage du reveil");
   display.display();
+  loop();
 }
-
-
 
                                 ///////LOOP///////  
 
