@@ -86,12 +86,21 @@ void loop(){
   display.clearDisplay();
 
   if(compteurflechemenu==0 && boutonENTER==HIGH){
-    //interuption systeme
+    marchearret();
   }
   if(compteurflechemenu==1 && boutonENTER==HIGH){         //selection de choix sur le menu
-    //entré paramétrage du reveil
+    reveil();
   }
   if(compteurflechemenu==2 && boutonENTER==HIGH){
-    //changement de mode d'affichage AM/PM
+    modeAMPM();
   }
+}
+void marchearret(){                                         //fonction permettant l'allumage de l'horloge
+
+}
+void reveil(){                                               //fonction permettant activation d'un reveil personalisé      
+
+}
+void modeAMPM(){                                              //fonction permettant de changer le mode d'afficahge de l'horloge. 
+
 }
