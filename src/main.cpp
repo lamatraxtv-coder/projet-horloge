@@ -51,12 +51,16 @@ void setup(){
 
 void marchearret(){                                         //fonction permettant l'allumage de l'horloge
   display.println("vous avez appuyé sur le bouton de marche arret");
+  display.display();
+
 }
 void reveil(){                                               //fonction permettant activation d'un reveil personalisé      
   display.println("vous avez appuyé sur le bouton d'activation et de desactivation du reveil");
+  display.display();
 }
 void modeAMPM(){                                              //fonction permettant de changer le mode d'afficahge de l'horloge. 
   display.println("vous avez appuyé sur le bouton du mode d'affichage du reveil");
+  display.display();
 }
 
 
@@ -81,7 +85,7 @@ void loop(){
   switch(compteurflechemenu){
     case 0:
       display.clearDisplay();
-      display.println("->alumer // eteindre l'horloge");
+      display.println("->allumer // eteindre l'horloge");
       display.println("  activer // desactvier un reveil");   
       display.println("  AM/PM");
       display.display();
