@@ -45,6 +45,15 @@ void setup(){
   display.display();
   delay(4000);
 }
+void marchearret(){                                         //fonction permettant l'allumage de l'horloge
+  display.println("vous avez appuyé sur le bouton de marche arret");
+}
+void reveil(){                                               //fonction permettant activation d'un reveil personalisé      
+  display.println("vous avez appuyé sur le bouton d'activation et de desactivation du reveil");
+}
+void modeAMPM(){                                              //fonction permettant de changer le mode d'afficahge de l'horloge. 
+  display.println("vous avez appuyé sur le bouton du mode d'affichage du reveil");
+}
 void loop(){
   //logic pour fleche sur display
   if(boutonUP==HIGH){
@@ -94,13 +103,4 @@ void loop(){
   if(compteurflechemenu==2 && boutonENTER==HIGH){
     modeAMPM();
   }
-}
-void marchearret(){                                         //fonction permettant l'allumage de l'horloge
-
-}
-void reveil(){                                               //fonction permettant activation d'un reveil personalisé      
-
-}
-void modeAMPM(){                                              //fonction permettant de changer le mode d'afficahge de l'horloge. 
-
 }
