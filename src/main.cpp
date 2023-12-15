@@ -23,7 +23,7 @@ Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire,-1);
 //init de la transmission par telecomande
 IRrecv irrecv(RecepteurIR);
 decode_results DonneRecue;
-
+                                        ////////SETUP////////
 void setup(){
   pinMode(boutonDOWN, INPUT);
   pinMode(boutonENTER, INPUT);
@@ -45,6 +45,10 @@ void setup(){
   display.display();
   delay(4000);
 }
+
+                          ///fonction des parametre de l'horloge///
+
+
 void marchearret(){                                         //fonction permettant l'allumage de l'horloge
   display.println("vous avez appuyé sur le bouton de marche arret");
 }
@@ -54,6 +58,11 @@ void reveil(){                                               //fonction permetta
 void modeAMPM(){                                              //fonction permettant de changer le mode d'afficahge de l'horloge. 
   display.println("vous avez appuyé sur le bouton du mode d'affichage du reveil");
 }
+
+
+
+                                ///////LOOP///////  
+
 void loop(){
   //logic pour fleche sur display
   if(boutonUP==HIGH){
