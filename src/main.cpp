@@ -17,7 +17,7 @@ int compteurmod=1; // si = 1 0 à 23h si = 0 mode AM PM.
 int compteurflecheMOD;
 
 int compteurflechemenu=0;
-int nbOPT=2;
+int nbOPT=3;
 
 //declaration de l'écran connecté en I2C
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire,-1);
@@ -170,28 +170,28 @@ void loop(){
     compteurflechemenu--;
   }
   if(compteurflechemenu>nbOPT){     //si la fleche depasse le nb d'option elle retourne en haut de la selection
-    compteurflechemenu=0;
+    compteurflechemenu=1;
   }
-  if(compteurflechemenu<0){         // si la fleche tente de depasser la premiere option alors elle va à la derniere option
+  if(compteurflechemenu<1){         // si la fleche tente de depasser la premiere option alors elle va à la derniere option
     compteurflechemenu=nbOPT;
   }
   //affichage sur le display
   switch(compteurflechemenu){
-    case 0:
+    case 1:
       display.clearDisplay();
       display.println("->allumer // eteindre l'horloge");
       display.println("  activer // desactvier un reveil");   
       display.println("  AM/PM");
       display.display();
       break;
-    case 1:
+    case 2:
       display.clearDisplay();
       display.println("  alumer // eteindre l'horloge");
       display.println("->activer // desactvier un reveil");
       display.println("  AM/PM");
       display.display();
       break;
-    case 2:
+    case 3:
       display.clearDisplay();
       display.println("  alumer // eteindre l'horloge");
       display.println("  activer // desactvier un reveil");
@@ -201,13 +201,13 @@ void loop(){
   }
   display.clearDisplay();
 
-  if(compteurflechemenu==0 && boutonENTER==HIGH){
+  if(compteurflechemenu==1 && boutonENTER==HIGH){
     marchearret();
   }
-  if(compteurflechemenu==1 && boutonENTER==HIGH){         //selection de choix sur le menu
+  if(compteurflechemenu==2 && boutonENTER==HIGH){         //selection de choix sur le menu
     reveil();
   }
-  if(compteurflechemenu==2 && boutonENTER==HIGH){
+  if(compteurflechemenu==3 && boutonENTER==HIGH){
     modeAMPM();
   }
 
