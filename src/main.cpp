@@ -2,7 +2,6 @@
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
 #include <Wire.h>
-#include <IRremote.h>
 
 #define largeurMENU 128
 #define hauteurMENU 64
@@ -12,7 +11,6 @@
 int boutonUP;                 
 int boutonDOWN;
 int boutonENTER;
-int RecepteurIR;
 int LEDdecompteur;
 int alimmatrice = HIGH;
 int compteurmod=1; // si = 1 0 à 23h si = 0 mode AM PM.
@@ -24,9 +22,7 @@ int nbOPT=2;
 //declaration de l'écran connecté en I2C
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire,-1);
 
-//init de la transmission par telecomande
-IRrecv irrecv(RecepteurIR);
-decode_results DonneRecue;
+
                                         ////////SETUP////////
 void setup(){
   pinMode(boutonDOWN, INPUT);
@@ -38,11 +34,10 @@ void setup(){
     Serial.println(F("SSD1306 allocation failed"));
     for(;;);
   }
-  irrecv.enableIRIn();                                 //activation de la telecomande
-  irrecv.blink13(true);                               
+                               
   display.setTextSize(1);                              //mode defaut du display
   display.setTextColor(WHITE);
-  display.setCursor(0,0);
+  display.setCursor(0,10);
   display.display();
   display.clearDisplay
 }
