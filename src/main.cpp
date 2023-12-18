@@ -2,16 +2,16 @@
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
 #include <Wire.h>
-#include <IRremote.h>
+
 
 #define largeurMENU 128
 #define hauteurMENU 64
 
 /*à mettre sur la breadboard : un objet permettant de bloquer l'alim de la matrice 
 */
-int boutonUP;                 
-int boutonDOWN;
-int boutonENTER;
+int boutonUP=A1;                 
+int boutonDOWN=A2;
+int boutonENTER=A0;
 int RecepteurIR;
 int LEDdecompteur;
 int alimmatrice = HIGH;
@@ -24,34 +24,28 @@ int nbOPT=2;
 //declaration de l'écran connecté en I2C
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire,-1);
 
-//init de la transmission par telecomande
-IRrecv irrecv(RecepteurIR);
-decode_results DonneRecue;
                                         ////////SETUP////////
 void setup(){
   pinMode(boutonDOWN, INPUT);
   pinMode(boutonENTER, INPUT);
   pinMode(boutonUP, INPUT);
-  pinMode(LEDdecompteur,OUTPUT);
   Serial.begin(115200);                               //debut de l'afficheur serie
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)){     
     Serial.println(F("SSD1306 allocation failed"));
     for(;;);
-  }
-  irrecv.enableIRIn();                                 //activation de la telecomande
-  irrecv.blink13(true);                               
+  }                               
 
   display.setTextSize(1);                              //mode defaut du display
   display.setTextColor(WHITE);
-  display.setCursor(0,0);
-  display.print("starting device."); delay(1000);display.print("starting device..");delay(1000);display.print("starting device..."); delay(1000);
+  display.setCursor(0,10);
+
   display.display();
   delay(4000);
 }
 
                           ///fonction des parametre de l'horloge///
 
-
+/*
 void marchearret(){                                         //fonction permettant l'allumage de l'horloge
   display.println("vous avez appuyé sur le bouton de marche arret");
   display.display();
@@ -165,7 +159,7 @@ void modeAMPM(){                                              //fonction permett
 
   loop();
 }
-
+*/
                                 ///////LOOP///////  
 
 void loop(){
@@ -185,30 +179,28 @@ void loop(){
   //affichage sur le display
   switch(compteurflechemenu){
     case 0:
-      display.clearDisplay();
       display.println("->allumer // eteindre l'horloge");
       display.println("  activer // desactvier un reveil");   
       display.println("  AM/PM");
       display.display();
       break;
     case 1:
-      display.clearDisplay();
       display.println("  alumer // eteindre l'horloge");
       display.println("->activer // desactvier un reveil");
       display.println("  AM/PM");
       display.display();
       break;
     case 2:
-      display.clearDisplay();
       display.println("  alumer // eteindre l'horloge");
       display.println("  activer // desactvier un reveil");
       display.println("->AM/PM");
       display.display();
       break;
+      display.clearDisplay();
   }
-  display.clearDisplay();
+  
 
-  if(compteurflechemenu==0 && boutonENTER==HIGH){
+  /*if(compteurflechemenu==0 && boutonENTER==HIGH){
     marchearret();
   }
   if(compteurflechemenu==1 && boutonENTER==HIGH){         //selection de choix sur le menu
@@ -216,6 +208,6 @@ void loop(){
   }
   if(compteurflechemenu==2 && boutonENTER==HIGH){
     modeAMPM();
-  }
+  }*/
 
 }
