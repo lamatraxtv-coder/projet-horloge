@@ -16,7 +16,7 @@ int alimmatrice = HIGH;
 int compteurmod=1; // si = 1 0 à 23h si = 0 mode AM PM.
 int compteurflecheMOD;
 
-int compteurflechemenu=0;
+int compteurflechemenu=1;
 int nbOPT=3;
 
 //declaration de l'écran connecté en I2C
@@ -176,27 +176,27 @@ void loop(){
     compteurflechemenu=nbOPT;
   }
   //affichage sur le display
-  switch(compteurflechemenu){
-    case 1:
+  if(compteurflechemenu==1){
       display.println("->allumer // eteindre l'horloge");
       display.println("  activer // desactvier un reveil");   
       display.println("  AM/PM");
       display.display();
-      break;
-    case 2:
-      display.println("  alumer // eteindre l'horloge");
-      display.println("->activer // desactvier un reveil");
+      delay(500000000000000000000000000);
+  }
+  if(compteurflechemenu==2){
+      display.println("  allumer // eteindre l'horloge");
+      display.println("->activer // desactvier un reveil");   
       display.println("  AM/PM");
       display.display();
-      break;
-    case 3:
-      display.println("  alumer // eteindre l'horloge");
-      display.println("  activer // desactvier un reveil");
+      delay(500000000000000000000000000);
+  }
+  if(compteurflechemenu==3){
+      display.println("  allumer // eteindre ");
+      display.println("  reveil");   
       display.println("->AM/PM");
       display.display();
-      break;
+      delay(500000000000000000000000000);
   }
-  display.clearDisplay();
 
   if(compteurflechemenu==1 && boutonENTER==HIGH){
     marchearret();
