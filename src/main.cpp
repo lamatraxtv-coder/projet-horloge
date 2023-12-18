@@ -39,7 +39,7 @@ void setup(){
   display.setTextColor(WHITE);
   display.setCursor(0,10);
   display.display();
-  display.clearDisplay
+  display.clearDisplay();
 }
 
                           ///fonction des parametre de l'horloge///
