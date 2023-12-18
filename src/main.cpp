@@ -178,21 +178,18 @@ void loop(){
   //affichage sur le display
   switch(compteurflechemenu){
     case 1:
-      display.clearDisplay();
       display.println("->allumer // eteindre l'horloge");
       display.println("  activer // desactvier un reveil");   
       display.println("  AM/PM");
       display.display();
       break;
     case 2:
-      display.clearDisplay();
       display.println("  alumer // eteindre l'horloge");
       display.println("->activer // desactvier un reveil");
       display.println("  AM/PM");
       display.display();
       break;
     case 3:
-      display.clearDisplay();
       display.println("  alumer // eteindre l'horloge");
       display.println("  activer // desactvier un reveil");
       display.println("->AM/PM");
