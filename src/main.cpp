@@ -177,23 +177,23 @@ void loop(){
   }
   //affichage sur le display
   if(compteurflechemenu==1){
-      display.println("->allumer // eteindre l'horloge");
-      display.println("  activer // desactvier un reveil");   
-      display.println("  AM/PM");
+      display.println("->allumer // eteindre ");
+      display.println("   reveil");   
+      display.println("  mode");
       display.display();
       delay(500000000000000000000000000);
   }
   if(compteurflechemenu==2){
-      display.println("  allumer // eteindre l'horloge");
-      display.println("->activer // desactvier un reveil");   
-      display.println("  AM/PM");
+      display.println("  allumer // eteindre ");
+      display.println("->reveil");   
+      display.println("  mode");
       display.display();
       delay(500000000000000000000000000);
   }
   if(compteurflechemenu==3){
       display.println("  allumer // eteindre ");
       display.println("  reveil");   
-      display.println("->AM/PM");
+      display.println("->mode");
       display.display();
       delay(500000000000000000000000000);
   }
