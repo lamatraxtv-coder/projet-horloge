@@ -12,7 +12,6 @@
 int boutonUP;                 
 int boutonDOWN;
 int boutonENTER;
-int potentio;
 int RecepteurIR;
 int LEDdecompteur;
 int alimmatrice = HIGH;
@@ -33,7 +32,6 @@ void setup(){
   pinMode(boutonDOWN, INPUT);
   pinMode(boutonENTER, INPUT);
   pinMode(boutonUP, INPUT);
-  pinMode(potentio, INPUT);
   pinMode(LEDdecompteur,OUTPUT);
   Serial.begin(115200);                               //debut de l'afficheur serie
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)){     
@@ -73,9 +71,48 @@ void marchearret(){                                         //fonction permettan
   loop();
 
 }
-void reveil(){                                               //fonction permettant activation d'un reveil personalisé      
+void reveil(){ 
+  int compteurheure=0;
+  int compteurminute=0;
+  int verif1=0;                                              //fonction permettant activation d'un reveil personalisé 
+  int verif2=0;
+  int verfi3=0;
+
   display.println("vous avez appuyé sur le bouton d'activation et de desactivation du reveil");
   display.display();
+  delay(1000);
+  display.clearDisplay();
+  while(verif1==0){
+    while(verif2==0){
+      display.print("heure de reveil :");
+      if(boutonUP==HIGH){
+        compteurminute++;
+      }
+      if(boutonDOWN==HIGH){
+        compteurminute--;
+      }
+      display.print(compteurminute);
+      display.display();
+      if(boutonENTER==HIGH){
+        verif2=1;
+      }  
+    }
+
+    while(verfi3=0){
+      if(boutonUP==HIGH){
+        compteurheure++;
+      }
+      if(boutonDOWN==HIGH){
+        compteurheure--;
+      }
+      display.print(compteurheure);
+      display.display();
+      if(boutonENTER==HIGH){
+        verfi3=0;
+        verif1=0;
+      }
+    }
+  }
   loop();
 }
 void modeAMPM(){                                              //fonction permettant de changer le mode d'afficahge de l'horloge. 
