@@ -16,6 +16,8 @@ int potentio;
 int RecepteurIR;
 int LEDdecompteur;
 int alimmatrice = HIGH;
+int compteurmod=1; // si = 1 0 à 23h si = 0 mode AM PM.
+int compteurflecheMOD;
 
 int compteurflechemenu=0;
 int nbOPT=2;
@@ -55,8 +57,9 @@ void setup(){
 void marchearret(){                                         //fonction permettant l'allumage de l'horloge
   display.println("vous avez appuyé sur le bouton de marche arret");
   display.display();
-  display.clearDisplay();
   delay(1000);
+  display.clearDisplay();
+  
 
   switch(alimmatrice){
 
@@ -78,6 +81,51 @@ void reveil(){                                               //fonction permetta
 void modeAMPM(){                                              //fonction permettant de changer le mode d'afficahge de l'horloge. 
   display.println("vous avez appuyé sur le bouton du mode d'affichage du reveil");
   display.display();
+  delay(1000);
+  display.clearDisplay();
+  if(boutonUP==HIGH){
+    compteurflecheMOD++;           //si on appuie sur le bouton up alors la fleche monte
+  }
+  if(boutonDOWN==HIGH){             //si on appuie sur le bouton down alors la fleche descend
+    compteurflecheMOD--;
+  }
+  if(compteurflecheMOD>1){     //si la fleche depasse le nb d'option elle retourne en haut de la selection
+    compteurflecheMOD=0;
+  }
+  if(compteurflecheMOD<0){         // si la fleche tente de depasser la premiere option alors elle va à la derniere option
+    compteurflecheMOD=1;
+  }
+  //affichage sur le display
+  switch(compteurflecheMOD){
+    case 0:
+      display.clearDisplay();
+      display.println("->MOD AM/PM");
+      display.println("  MOD europe");
+      display.display();
+      break;
+    case 1:
+      display.clearDisplay();
+      display.println("  MOD AM/PM");
+      display.println("->MOD europe");
+      display.display();
+      break;
+  }
+  if(compteurflecheMOD==0 && boutonENTER==HIGH){
+    compteurmod=0;
+    display.println("mode AM/PM actif");
+    delay(1000);
+    display.clearDisplay();
+    loop();
+  }
+  if(compteurflecheMOD==1 && boutonENTER==HIGH){
+    compteurmod=1;
+    display.println("mode europe actif");
+    delay(1000);
+    display.clearDisplay();
+    loop();
+  }
+
+
   loop();
 }
 
