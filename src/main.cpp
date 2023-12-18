@@ -8,9 +8,9 @@
 
 /*à mettre sur la breadboard : un objet permettant de bloquer l'alim de la matrice 
 */
-int boutonUP;                 
-int boutonDOWN;
-int boutonENTER;
+int boutonUP=A1;                 
+int boutonDOWN=A2;
+int boutonENTER=A0;
 int LEDdecompteur;
 int alimmatrice = HIGH;
 int compteurmod=1; // si = 1 0 à 23h si = 0 mode AM PM.
