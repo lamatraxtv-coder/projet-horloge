@@ -14,7 +14,7 @@ int boutonENTER=A0;
 int LEDdecompteur;
 int alimmatrice = HIGH;
 int compteurmod=1; // si = 1 0 à 23h si = 0 mode AM PM.
-int compteurflecheMOD;
+int compteurflecheMOD=1;
 
 int compteurflechemenu=1;
 int nbOPT=3;
@@ -119,25 +119,33 @@ void modeAMPM(){                                              //fonction permett
   if(boutonDOWN==HIGH){             //si on appuie sur le bouton down alors la fleche descend
     compteurflecheMOD--;
   }
-  if(compteurflecheMOD>1){     //si la fleche depasse le nb d'option elle retourne en haut de la selection
-    compteurflecheMOD=0;
-  }
-  if(compteurflecheMOD<0){         // si la fleche tente de depasser la premiere option alors elle va à la derniere option
+  if(compteurflecheMOD>2){     //si la fleche depasse le nb d'option elle retourne en haut de la selection
     compteurflecheMOD=1;
+  }
+  if(compteurflecheMOD<1){         // si la fleche tente de depasser la premiere option alors elle va à la derniere option
+    compteurflecheMOD=2;
   }
   //affichage sur le display
   switch(compteurflecheMOD){
-    case 0:
+    case 1:
       display.clearDisplay();
       display.println("->MOD AM/PM");
       display.println("  MOD europe");
       display.display();
+      delay(1000);
+      display.clearDisplay();
+      display.setCursor(0,10);
+      display.display()
       break;
-    case 1:
+    case 2:
       display.clearDisplay();
       display.println("  MOD AM/PM");
       display.println("->MOD europe");
       display.display();
+      delay(1000);
+      display.clearDisplay();
+      display.setCursor(0,10);
+      display.display()
       break;
   }
   if(compteurflecheMOD==0 && boutonENTER==HIGH){
