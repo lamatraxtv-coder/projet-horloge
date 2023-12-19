@@ -153,6 +153,7 @@ void modeAMPM(){                                              //fonction permett
     display.println("mode AM/PM actif");
     delay(1000);
     display.clearDisplay();
+    display.display();
     loop();
   }
   if(compteurflecheMOD==1 && boutonENTER==HIGH){
@@ -160,6 +161,7 @@ void modeAMPM(){                                              //fonction permett
     display.println("mode europe actif");
     delay(1000);
     display.clearDisplay();
+    display.display();
     loop();
   }
 
