@@ -181,21 +181,30 @@ void loop(){
       display.println("   reveil");   
       display.println("  mode");
       display.display();
-      delay(500000000000000000000000000);
+      delay(1000);
+      display.clearDisplay();
+      display.setCursor(0,10);
+      display.display();
   }
   if(compteurflechemenu==2){
       display.println("  allumer // eteindre ");
       display.println("->reveil");   
       display.println("  mode");
       display.display();
-      delay(500000000000000000000000000);
+      delay(1000);
+      display.clearDisplay();
+      display.setCursor(0,10);
+      display.display();
   }
   if(compteurflechemenu==3){
       display.println("  allumer // eteindre ");
       display.println("  reveil");   
       display.println("->mode");
       display.display();
-      delay(500000000000000000000000000);
+      delay(1000);
+      display.clearDisplay();
+      display.setCursor(0,10);
+      display.display();
   }
 
   if(compteurflechemenu==1 && boutonENTER==HIGH){
