@@ -15,7 +15,6 @@ int LEDdecompteur;
 int alimmatrice = HIGH;
 int compteurmod=1; // si = 1 0 à 23h si = 0 mode AM PM.
 int compteurflecheMOD=1;
-
 int compteurflechemenu=1;
 int nbOPT=3;
 
@@ -43,11 +42,23 @@ void setup(){
 }
 
                                 ///////LOOP///////  
-void modeAMPM(){
-  return 0;
+int modeAMPM(){
+  if (compteurmod==0){
+    compteurmod=1;
+    display.println("changement en format horraire de 12 h");
+  }
+
+  if (compteurmod==1){
+    compteurmod=0;
+    display.println("changement en format horraire de 24 h");
+  }
+  delay(1000);
+  loop();
 }
 
 void reveil(){
+  display.clearDisplay();
+  display.println();
   return 0;
 }
 
@@ -71,7 +82,7 @@ void loop(){
     compteurflechemenu = nbOPT;
   }
   //affichage sur le display
-  display.clearDisplay(); // Clear the display before updating
+  display.clearDisplay(); 
   display.setCursor(0,10);
 
   if(compteurflechemenu==1){
@@ -91,9 +102,8 @@ void loop(){
   }
 
   display.display();
-  delay(100); // Add a small delay to avoid rapid changes
+  delay(100); 
 
-  // Your menu selection logic
   if(compteurflechemenu==1 && digitalRead(boutonENTER) == HIGH){
     marchearret();
   }
