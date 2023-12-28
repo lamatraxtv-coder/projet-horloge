@@ -42,20 +42,20 @@ void setup(){
 }
 
                                 ///////LOOP///////  
-int modeAMPM(){
+void modeAMPM(){
   display.clearDisplay();
-  if (compteurmod==0){
-    compteurmod=1;
-    display.println("changement en format horraire de 12 h");
+  if (compteurmod == 0){
+    compteurmod = 1;
+    display.println("Changement en format horaire de 12 h");
   }
-
-  if (compteurmod==1){
-    compteurmod=0;
-    display.println("changement en format horraire de 24 h");
+  else {
+    compteurmod = 0;
+    display.println("Changement en format horaire de 24 h");
   }
-  delay(1000);
-  loop();
+  display.display();
+  delay(10000);
 }
+
 
 void reveil(){
   display.clearDisplay();
