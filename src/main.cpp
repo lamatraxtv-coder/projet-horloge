@@ -43,6 +43,7 @@ void setup(){
 
                                 ///////LOOP///////  
 int modeAMPM(){
+  display.clearDisplay();
   if (compteurmod==0){
     compteurmod=1;
     display.println("changement en format horraire de 12 h");
