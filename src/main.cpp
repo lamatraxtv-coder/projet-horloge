@@ -41,7 +41,7 @@ void setup(){
   display.clearDisplay();
 }
 
-                                ///////LOOP///////  
+  
 void modeAMPM(){
   display.clearDisplay();
   if (compteurmod == 0){
@@ -53,19 +53,32 @@ void modeAMPM(){
     display.println("Changement en format horaire de 24 h");
   }
   display.display();
-  delay(10000);
+  delay(5000);
+  return;
 }
 
 
 void reveil(){
   display.clearDisplay();
   display.println();
-  return 0;
+  return ;
 }
 
 void marchearret(){
-  return 0;
+  display.clearDisplay();
+  if (alimmatrice==HIGH){
+    alimmatrice=LOW;
+    display.println("matrice eteinte");
+    delay(5000);
+  }
+  else{
+    alimmatrice=HIGH;
+    display.println("matrice allumé");
+    delay(5000);
+  }
+  return ;
 }
+                                ///////LOOP///////
 void loop(){
   //logic pour fleche sur display
   if(digitalRead(boutonUP) == HIGH){
