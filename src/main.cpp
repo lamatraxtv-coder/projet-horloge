@@ -29,7 +29,7 @@ void setup(){
   pinMode(boutonENTER, INPUT);
   pinMode(boutonUP, INPUT);
   pinMode(LEDdecompteur,OUTPUT);
-  Serial.begin(115200);                               //debut de l'afficheur serie
+  Serial.begin(9600);                               //debut de l'afficheur serie
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)){     
     Serial.println(F("SSD1306 allocation failed"));
     for(;;);
@@ -42,189 +42,65 @@ void setup(){
   display.clearDisplay();
 }
 
-                          ///fonction des parametre de l'horloge///
-
-
-void marchearret(){                                         //fonction permettant l'allumage de l'horloge
-  display.println("vous avez appuyé sur le bouton de marche arret");
-  display.display();
-  delay(1000);
-  display.clearDisplay();
-  
-
-  switch(alimmatrice){
-
-    case HIGH :
-      alimmatrice = LOW;
-    
-    case LOW : 
-      alimmatrice = HIGH;
-  }
-
-  loop();
-
-}
-void reveil(){ 
-  int compteurheure=0;
-  int compteurminute=0;
-  int verif1=0;                                              //fonction permettant activation d'un reveil personalisé 
-  int verif2=0;
-  int verfi3=0;
-
-  display.println("vous avez appuyé sur le bouton d'activation et de desactivation du reveil");
-  display.display();
-  delay(1000);
-  display.clearDisplay();
-  while(verif1==0){
-    while(verif2==0){
-      display.print("heure de reveil :");
-      if(boutonUP==HIGH){
-        compteurminute++;
-      }
-      if(boutonDOWN==HIGH){
-        compteurminute--;
-      }
-      display.print(compteurminute);
-      display.display();
-      if(boutonENTER==HIGH){
-        verif2=1;
-      }  
-    }
-
-    while(verfi3=0){
-      if(boutonUP==HIGH){
-        compteurheure++;
-      }
-      if(boutonDOWN==HIGH){
-        compteurheure--;
-      }
-      display.print(compteurheure);
-      display.display();
-      if(boutonENTER==HIGH){
-        verfi3=0;
-        verif1=0;
-      }
-    }
-  }
-  loop();
-}
-void modeAMPM(){                                              //fonction permettant de changer le mode d'afficahge de l'horloge. 
-  display.println("vous avez appuyé sur le bouton du mode d'affichage du reveil");
-  display.display();
-  delay(1000);
-  display.clearDisplay();
-  if(boutonUP==HIGH){
-    compteurflecheMOD++;           //si on appuie sur le bouton up alors la fleche monte
-  }
-  if(boutonDOWN==HIGH){             //si on appuie sur le bouton down alors la fleche descend
-    compteurflecheMOD--;
-  }
-  if(compteurflecheMOD>2){     //si la fleche depasse le nb d'option elle retourne en haut de la selection
-    compteurflecheMOD=1;
-  }
-  if(compteurflecheMOD<1){         // si la fleche tente de depasser la premiere option alors elle va à la derniere option
-    compteurflecheMOD=2;
-  }
-  //affichage sur le display
-  switch(compteurflecheMOD){
-    case 1:
-      display.clearDisplay();
-      display.println("->MOD AM/PM");
-      display.println("  MOD europe");
-      display.display();
-      delay(1000);
-      display.clearDisplay();
-      display.setCursor(0,10);
-      display.display()
-      break;
-    case 2:
-      display.clearDisplay();
-      display.println("  MOD AM/PM");
-      display.println("->MOD europe");
-      display.display();
-      delay(1000);
-      display.clearDisplay();
-      display.setCursor(0,10);
-      display.display()
-      break;
-  }
-  if(compteurflecheMOD==0 && boutonENTER==HIGH){
-    compteurmod=0;
-    display.println("mode AM/PM actif");
-    delay(1000);
-    display.clearDisplay();
-    display.display();
-    loop();
-  }
-  if(compteurflecheMOD==1 && boutonENTER==HIGH){
-    compteurmod=1;
-    display.println("mode europe actif");
-    delay(1000);
-    display.clearDisplay();
-    display.display();
-    loop();
-  }
-
-
-  loop();
-}
-
                                 ///////LOOP///////  
+void modeAMPM(){
+  return 0;
+}
 
+void reveil(){
+  return 0;
+}
+
+void marchearret(){
+  return 0;
+}
 void loop(){
   //logic pour fleche sur display
-  if(boutonUP==HIGH){
+  if(digitalRead(boutonUP) == HIGH){
     compteurflechemenu++;           //si on appuie sur le bouton up alors la fleche monte
+    Serial.println("up");
   }
-  if(boutonDOWN==HIGH){             //si on appuie sur le bouton down alors la fleche descend
+  if(digitalRead(boutonDOWN) == HIGH){             //si on appuie sur le bouton down alors la fleche descend
     compteurflechemenu--;
+    Serial.println("down");
   }
-  if(compteurflechemenu>nbOPT){     //si la fleche depasse le nb d'option elle retourne en haut de la selection
-    compteurflechemenu=1;
+  if(compteurflechemenu > nbOPT){     //si la fleche depasse le nb d'option elle retourne en haut de la selection
+    compteurflechemenu = 1;
   }
-  if(compteurflechemenu<1){         // si la fleche tente de depasser la premiere option alors elle va à la derniere option
-    compteurflechemenu=nbOPT;
+  if(compteurflechemenu < 1){         // si la fleche tente de depasser la premiere option alors elle va à la derniere option
+    compteurflechemenu = nbOPT;
   }
   //affichage sur le display
+  display.clearDisplay(); // Clear the display before updating
+  display.setCursor(0,10);
+
   if(compteurflechemenu==1){
       display.println("->allumer // eteindre ");
-      display.println("   reveil");   
+      display.println("  reveil");   
       display.println("  mode");
-      display.display();
-      delay(1000);
-      display.clearDisplay();
-      display.setCursor(0,10);
-      display.display();
   }
   if(compteurflechemenu==2){
       display.println("  allumer // eteindre ");
       display.println("->reveil");   
       display.println("  mode");
-      display.display();
-      delay(1000);
-      display.clearDisplay();
-      display.setCursor(0,10);
-      display.display();
   }
   if(compteurflechemenu==3){
       display.println("  allumer // eteindre ");
       display.println("  reveil");   
       display.println("->mode");
-      display.display();
-      delay(1000);
-      display.clearDisplay();
-      display.setCursor(0,10);
-      display.display();
   }
 
-  if(compteurflechemenu==1 && boutonENTER==HIGH){
+  display.display();
+  delay(100); // Add a small delay to avoid rapid changes
+
+  // Your menu selection logic
+  if(compteurflechemenu==1 && digitalRead(boutonENTER) == HIGH){
     marchearret();
   }
-  if(compteurflechemenu==2 && boutonENTER==HIGH){         //selection de choix sur le menu
+  if(compteurflechemenu==2 && digitalRead(boutonENTER) == HIGH){         //selection de choix sur le menu
     reveil();
   }
-  if(compteurflechemenu==3 && boutonENTER==HIGH){
+  if(compteurflechemenu==3 && digitalRead(boutonENTER) == HIGH){
     modeAMPM();
   }
-
 }
