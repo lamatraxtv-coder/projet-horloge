@@ -10,13 +10,17 @@
 */
 int boutonUP=A1;                 
 int boutonDOWN=A2;
-int boutonENTER=A0;
+int boutonENTER=A3;
 int LEDdecompteur;
 int alimmatrice = HIGH;
 int compteurmod=1; // si = 1 0 à 23h si = 0 mode AM PM.
-int compteurflecheMOD=1;
 int compteurflechemenu=1;
 int nbOPT=3;
+int verifreveil1=0;
+int verifreveil2=0;
+int compteurreveilm;
+int compteurreveilh;
+
 
 //declaration de l'écran connecté en I2C
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire,-1);
@@ -44,6 +48,7 @@ void setup(){
   
 void modeAMPM(){
   display.clearDisplay();
+  display.setCursor(0,10);
   if (compteurmod == 0){
     compteurmod = 1;
     display.println("Changement en format horaire de 12 h");
@@ -60,7 +65,11 @@ void modeAMPM(){
 
 void reveil(){
   display.clearDisplay();
-  display.println();
+  display.println("initialisation du reveil");
+  delay(3000);
+  display.clearDisplay();
+  display.setCursor(0,10);
+  display.println("heure : ");
   return ;
 }
 
