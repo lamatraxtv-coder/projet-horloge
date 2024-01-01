@@ -12,7 +12,7 @@ int boutonUP=A1;
 int boutonDOWN=A2;
 int boutonENTER=A3;
 int LEDdecompteur;
-int alimmatrice = HIGH;
+int alimmatrice = 0;// 0 si eteind 1 si allumé
 int compteurmod=1; // si = 1 0 à 23h si = 0 mode AM PM.
 int compteurflechemenu=1;
 int nbOPT=3;
@@ -21,7 +21,6 @@ int verifreveil2=0;
 int compteurreveilm;
 int compteurreveilh;
 int compteurreveilampm;
-int activationreveil=0;
 
 
 //declaration de l'écran connecté en I2C
@@ -47,6 +46,7 @@ void setup(){
   display.clearDisplay();
 }
 
+
   
 void modeAMPM(){
   display.clearDisplay();
@@ -61,55 +61,28 @@ void modeAMPM(){
   }
   display.display();
   delay(5000);
-  return;
+  return loop();
 }
 
 
-void reveil(){
-  display.clearDisplay();
-  display.setCursor(0,10);
-  display.println("initialisation du reveil");
-  delay(3000);
-  display.clearDisplay();
-  display.println("heure : ");
-  if(activationreveil==0){
-    activationreveil=1;
-  }
-  if(activationreveil==1){
-    activationreveil=0;
-    display.println("desactivation du reveil");
-    loop();
-  }
-  while (verifreveil1==0){
-
-    display.print(compteurreveilm);
-
-    if(digitalRead(boutonUP)==HIGH){
-      compteurreveilm++;
-    }
-    if(digitalRead(boutonDOWN)==HIGH){
-      compteurreveilm--;
-    }
-    if(digitalRead(boutonENTER)==HIGH){
-      verifreveil1=1;
-    }
-  }
-  return ;
-}
 
 void marchearret(){
   display.clearDisplay();
-  if (alimmatrice==HIGH){
-    alimmatrice=LOW;
+  display.setCursor(0,10);
+  if (alimmatrice==1){
+    alimmatrice=0;
     display.println("matrice eteinte");
+    display.display();
     delay(5000);
   }
   else{
-    alimmatrice=HIGH;
-    display.println("matrice allumé");
+    alimmatrice=1;
+    display.println("matrice allume");
+    display.display();
     delay(5000);
   }
-  return ;
+  display.display();
+  return loop();
 }
                                 ///////LOOP///////
 void loop(){
@@ -149,16 +122,13 @@ void loop(){
   }
 
   display.display();
-  delay(100); 
+  delay(100);
 
   if(compteurflechemenu==1 && digitalRead(boutonENTER) == HIGH){
     marchearret();
   }
-  if(compteurflechemenu==2 && digitalRead(boutonENTER) == HIGH){         //selection de choix sur le menu
-    reveil();
-  }
+  
   if(compteurflechemenu==3 && digitalRead(boutonENTER) == HIGH){
     modeAMPM();
   }
-  delay(100);
 }
