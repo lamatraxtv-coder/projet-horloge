@@ -20,6 +20,8 @@ int verifreveil1=0;
 int verifreveil2=0;
 int compteurreveilm;
 int compteurreveilh;
+int compteurreveilampm;
+int activationreveil=0;
 
 
 //declaration de l'écran connecté en I2C
@@ -65,11 +67,33 @@ void modeAMPM(){
 
 void reveil(){
   display.clearDisplay();
+  display.setCursor(0,10);
   display.println("initialisation du reveil");
   delay(3000);
   display.clearDisplay();
-  display.setCursor(0,10);
   display.println("heure : ");
+  if(activationreveil==0){
+    activationreveil=1;
+  }
+  if(activationreveil==1){
+    activationreveil=0;
+    display.println("desactivation du reveil");
+    loop();
+  }
+  while (verifreveil1==0){
+
+    display.print(compteurreveilm);
+
+    if(digitalRead(boutonUP)==HIGH){
+      compteurreveilm++;
+    }
+    if(digitalRead(boutonDOWN)==HIGH){
+      compteurreveilm--;
+    }
+    if(digitalRead(boutonENTER)==HIGH){
+      verifreveil1=1;
+    }
+  }
   return ;
 }
 
@@ -136,4 +160,5 @@ void loop(){
   if(compteurflechemenu==3 && digitalRead(boutonENTER) == HIGH){
     modeAMPM();
   }
+  delay(100);
 }
