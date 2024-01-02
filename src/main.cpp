@@ -24,7 +24,7 @@ int compteurreveilampm = 0;
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
 
 // Function prototypes
-void marchearret();
+void marche_arret();
 void modeAMPM();
 void reveil24();
 void reveil12();
