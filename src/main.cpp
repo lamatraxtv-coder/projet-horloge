@@ -21,8 +21,37 @@ int compteurreveilm = 0;
 int compteurreveilh = 0;
 int compteurreveilampm = 0;
 
-// pin buzzer au pif
-int pinBuzzer = 5 
+/* int pinBuzzer = 5 
+
+pinMode(pinBuzzer, OUTPUT)
+
+if (compteurreveilm == affichageheurem)&&(compteurreveilh == affichagereveilh){
+  
+  //Fréquences des notes de la mélodie
+  int melodie[] = {262, 196, 196, 220, 196, 247, 262};
+
+  //Durée des notes (4 = dure un quart du temps, 8=dure un octave, etc.)//
+  int dureeNote[] = {4,8,8,4,4,4,4,4 };
+  int i;
+  
+  //on répete les 7 notes de la mélodie une après l'autre
+  for (i = 0; i < 8; i++){
+  
+    //Pour calculer la durée de la note, on divise une seconde par la
+    quantité signalée dans dureeNote[]. Exemple, un quart du temps
+    est 1000/4 secondes, un octave est 1000/8 secondes, etc.//
+    tone(9, melodie[i], 1000/dureeNote[i]);
+  
+    //Comme la fonction tone() ne bloque pas, le sketch continue à s'exécuter
+    sans arrêt. Pour  éviter de revenir au début de la boucle for et pour pouvoir différencier les notes, j'établis un temps minimal
+    entre elles//
+    delay(1300/dureeNote[i]);
+  
+    // on arrête l'émission des sons//
+    noTone(9);
+  }
+}
+*/
 
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
 
@@ -176,7 +205,7 @@ void reveil24() {
 
     display.println("heure de la sonnerie : ");
     display.println(compteurreveilh, ":", "00");
-    display.println("appuyé sur le bouton central pour selectionner l'heure");
+    display.println("appuyer sur le bouton central pour selectionner l'heure");
     display.display();
     delay(100);
     display.clearDisplay();
@@ -205,9 +234,9 @@ void reveil24() {
       compteurreveilm = 59;
     }
 
-    display.println("heure de la sonnerie : ");
+    display.println("Heure de la sonnerie : ");
     display.println(compteurreveilh, ":", compteurreveilm);
-    display.println("appuyé sur le bouton central pour selectionner l'heure");
+    display.println("appuyer sur le bouton central pour selectionner l'heure");
     display.display();
     delay(100);
     display.clearDisplay();
