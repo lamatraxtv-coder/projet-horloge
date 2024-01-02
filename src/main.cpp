@@ -21,6 +21,9 @@ int compteurreveilm = 0;
 int compteurreveilh = 0;
 int compteurreveilampm = 0;
 
+// pin buzzer au pif
+int pinBuzzer = 5 
+
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
 
 // Function prototypes
