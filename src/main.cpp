@@ -113,7 +113,7 @@ void loop() {
   }
 }
 
-void marchearret() {
+void marche_arret() {
   display.clearDisplay();
   display.setCursor(0, 10);
 
