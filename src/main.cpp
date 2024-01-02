@@ -2,7 +2,7 @@
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
 #include <Wire.h>
-
+#include <RTClib.h>
 
 #define largeurMENU 128
 #define hauteurMENU 64
@@ -14,7 +14,7 @@ int boutonDOWN=A2;
 int boutonENTER=A3;
 int LEDdecompteur;
 int alimmatrice = 0;// 0 si eteind 1 si allumé
-int compteurmod=1; // si = 1 0 à 23h si = 0 mode AM PM.
+int compteurmod=1; // si = 1 24h //si = 0 12h.
 int compteurflechemenu=1;
 int nbOPT=3;
 int verifreveil1=0;
@@ -64,6 +64,59 @@ void modeAMPM(){
   delay(5000);
   return loop();
 }
+void reveil24(){
+  display.clearDisplay();
+  display.setCursor(0,10);
+  while(verifreveil1==0){
+    if(digitalRead(boutonUP)==HIGH){
+      compteurreveilh++;
+    }
+    if(digitalRead(boutonDOWN)==HIGH){
+      compteurreveilh--;
+    }
+    if(compteurreveilh>23){
+      compteurreveilh=0;
+    }
+    if(compteurreveilh<0){
+      compteurreveilh=23;
+    }
+    display.println("heure de la sonnerie : ");
+    display.println(compteurreveilh, ":","00");
+    display.println("appuyé sur le bouton central pour selectionner l'heure");
+    display.display();
+    delay(100);
+    display.clearDisplay();
+
+    if(digitalRead(boutonENTER)==HIGH){
+      verifreveil1=1
+    }
+  }
+  display.setCursor(0,10);
+  while(verifreveil2==0){
+    if(digitalRead(boutonUP)==HIGH){
+      compteurreveilm++;
+    }
+    if(digitalRead(boutonDOWN)==HIGH){
+      compteurreveilm--;
+    }
+    if(compteurreveilh>59){
+      compteurreveilm=0;
+    }
+    if(compteurreveilh<0){
+      compteurreveilm=59;
+    }
+    display.println("heure de la sonnerie : ");
+    display.println(compteurreveilh, ":",compteurreveilm);
+    display.println("appuyé sur le bouton central pour selectionner l'heure");
+    display.display();
+    delay(100);
+    display.clearDisplay();
+  }
+}
+
+void reveil12(){
+  return;
+}
 
 
 
@@ -88,6 +141,8 @@ void marchearret(){
                                 ///////LOOP///////
 void loop(){
   //logic pour fleche sur display
+  verifreveil1=0
+  verifreveil2=0
   if(digitalRead(boutonUP) == HIGH){
     compteurflechemenu++;           //si on appuie sur le bouton up alors la fleche monte
     Serial.println("up");
@@ -127,6 +182,14 @@ void loop(){
 
   if(compteurflechemenu==1 && digitalRead(boutonENTER) == HIGH){
     marchearret();
+  }
+  if(compteurflechemenu==2 && digitalRead(boutonENTER) == HIGH){
+    if(compteurmod==1){
+      reveil24();
+    }
+    else{
+      reveil12();
+    }
   }
   
   if(compteurflechemenu==3 && digitalRead(boutonENTER) == HIGH){
