@@ -2,7 +2,7 @@
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
 #include <Wire.h>
-#include <RTClib.h>
+
 
 #define largeurMENU 128
 #define hauteurMENU 64
@@ -17,14 +17,18 @@ int compteurflechemenu = 1;
 int nbOPT = 3;
 int verifreveil1 = 0;
 int verifreveil2 = 0;
+int verifreveil3 = 0;
 int compteurreveilm = 0;
 int compteurreveilh = 0;
 int compteurreveilampm = 0;
 
+// pin buzzer au pif
+int pinBuzzer = 5;
+
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
 
 // Function prototypes
-void marchearret();
+void marche_arret();
 void modeAMPM();
 void reveil24();
 void reveil12();
@@ -51,9 +55,8 @@ void setup() {
 }
 
 void loop() {
-  verifreveil1 = 0;
-  verifreveil2 = 0;
 
+  display.clearDisplay();
   if (digitalRead(boutonUP) == HIGH) {
     compteurflechemenu++;
     Serial.println("up");
@@ -97,7 +100,7 @@ void loop() {
   delay(100);
 
   if (compteurflechemenu == 1 && digitalRead(boutonENTER) == HIGH) {
-    marchearret();
+    marche_arret();
   }
 
   if (compteurflechemenu == 2 && digitalRead(boutonENTER) == HIGH) {
@@ -113,7 +116,7 @@ void loop() {
   }
 }
 
-void marchearret() {
+void marche_arret() {
   display.clearDisplay();
   display.setCursor(0, 10);
 
@@ -155,6 +158,7 @@ void reveil24() {
   display.setCursor(0, 10);
 
   while (verifreveil1 == 0) {
+    display.setCursor(0, 10);
     if (digitalRead(boutonUP) == HIGH) {
       compteurreveilh++;
     }
@@ -171,9 +175,11 @@ void reveil24() {
       compteurreveilh = 23;
     }
 
-    display.println("heure de la sonnerie : ");
-    display.println(compteurreveilh, ":", "00");
-    display.println("appuyé sur le bouton central pour selectionner l'heure");
+    display.println("heure de la sonnerie  ");
+    display.print(compteurreveilh);
+    display.print(":");
+    display.println("00");
+    display.println("appuye sur le bouton central pour selectionner l'heure");
     display.display();
     delay(100);
     display.clearDisplay();
@@ -186,6 +192,7 @@ void reveil24() {
   display.setCursor(0, 10);
 
   while (verifreveil2 == 0) {
+    display.setCursor(0, 10);
     if (digitalRead(boutonUP) == HIGH) {
       compteurreveilm++;
     }
@@ -203,14 +210,23 @@ void reveil24() {
     }
 
     display.println("heure de la sonnerie : ");
-    display.println(compteurreveilh, ":", compteurreveilm);
-    display.println("appuyé sur le bouton central pour selectionner l'heure");
+    display.print(compteurreveilh);
+    display.print(":");
+    display.println(compteurreveilm);
+    display.println("appuyer sur le bouton central pour selectionner l'heure");
     display.display();
     delay(100);
     display.clearDisplay();
+    if(digitalRead(boutonENTER)==HIGH){
+      verifreveil2=1;
+    }
   }
+  verifreveil1 = 0;
+  verifreveil2 = 0;
+  loop();
 }
 
 void reveil12() {
-  // Add your code for 12-hour format alarm here
+
+  
 }
