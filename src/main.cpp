@@ -15,7 +15,7 @@ int alimmatrice = 0;
 
 int compteurmod = 1;  // (1) pour format 24 (0) pour format 12 
 int compteurflechemenu = 1;
-int nbOPT = 3;
+int nbOPT = 5;
 
 int verifreveil1 = 0;
 int verifreveil2 = 0;
@@ -84,18 +84,38 @@ void loop() {
     display.println("->allumer // eteindre ");
     display.println("  reveil");
     display.println("  mode");
+    display.println("  Afficher temps");
+    display.println("  Effacer temps");
   }
 
   if (compteurflechemenu == 2) {
     display.println("  allumer // eteindre ");
     display.println("->reveil");
     display.println("  mode");
+    display.println("  Afficher temps");
+    display.println("  Effacer temps");
   }
 
   if (compteurflechemenu == 3) {
     display.println("  allumer // eteindre ");
     display.println("  reveil");
     display.println("->mode");
+    display.println("  Afficher temps");
+    display.println("  Effacer temps");
+  }
+  if (compteurflechemenu == 4) {
+    display.println("  allumer // eteindre ");
+    display.println("  reveil");
+    display.println("  mode");
+    display.println("->Afficher temps");
+    display.println("  Effacer temps");
+  }
+  if (compteurflechemenu == 5) {
+    display.println("  allumer // eteindre ");
+    display.println("  reveil");
+    display.println("  mode");
+    display.println("  Afficher temps");
+    display.println("->Effacer temps");
   }
 
   display.display();
@@ -358,5 +378,103 @@ void conversion2412(){
     compteurreveilampm = 1; 
   }
 
+}
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <EEPROM.h>
+#include <Ultrasonic.h>
+#include <Arduino.h>
+
+#define OLED_RESET 4
+Adafruit_SSD1306 display(OLED_RESET);
+
+#define trigPin 11 // Broche de déclenchement du capteur à ultrasons
+#define echoPin 12 // Broche de réception du capteur à ultrasons
+#define interruptPin 2 // Broche d'interruption externe pour le bouton poussoir
+#define MEMORY_ADDRESS 0 // Adresse de départ dans la mémoire EEPROM pour enregistrer le temps
+
+volatile bool started = false;
+volatile unsigned long startTime = 0;
+volatile unsigned long stopTime = 0;
+volatile unsigned long elapsedTime = 0;
+
+Ultrasonic ultrasonic(trigPin, echoPin);
+
+void setup() {
+  pinMode(interruptPin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(interruptPin), startStopTimer, CHANGE);
+
+  Serial.begin(9600);
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.display();
+  delay(1000);
+  display.clearDisplay();
+}
+
+void loop() {
+  displayMenu(); // Affiche le menu sur l'écran OLED
+  delay(100);
+}
+
+void startStopTimer() {
+  if (!started) {
+    started = true;
+    startTime = millis(); // Démarre le chrono
+  } else {
+    stopTime = millis(); // Arrête le chrono
+    started = false;
+    elapsedTime = stopTime - startTime;
+
+    // Enregistrement dans la mémoire EEPROM
+    EEPROM.put(MEMORY_ADDRESS, elapsedTime);
+  }
+}
+
+void displayMenu() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println("Menu:");
+  display.println("1. Afficher temps");
+  display.println("2. Effacer temps");
+  display.display();
+
+  int selectedOption = 0;
+
+  while (selectedOption == 0) {
+    if (digitalRead(interruptPin) == LOW) {
+      delay(100);
+      selectedOption = 1; // Afficher temps
+    }
+  }
+
+  switch (selectedOption) {
+    case 1: // Afficher temps
+      display.clearDisplay();
+      display.setTextSize(1);
+      display.setTextColor(SSD1306_WHITE);
+      display.setCursor(0, 0);
+      display.println("Temps d'extinction:");
+      display.print("   ");
+      display.print(elapsedTime);
+      display.println(" ms");
+      display.display();
+      break;
+    
+    case 2: // Effacer temps
+      display.clearDisplay();
+      display.setTextSize(1);
+      display.setTextColor(SSD1306_WHITE);
+      display.setCursor(0, 0);
+      display.println("Temps effacé !");
+      display.display();
+      EEPROM.put(MEMORY_ADDRESS, 0); // Efface les données enregistrées dans la mémoire
+      break;
+
+    default:
+      break;
+  }
 }
   
