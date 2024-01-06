@@ -382,10 +382,16 @@ void reveil12() {
   verifreveil3 = 0;
   loop();
 }
-int conversion1224(){
-
+void conversion1224(){
+  if(compteurreveilampm == 1){
+    compteurreveilh += 12;
+  }
 }
-int conversion2412(){
+void conversion2412(){
+  if(compteurreveilh > 12){
+    compteurreveilh=-12;
+    compteurreveilampm = 1; 
+  }
 
 }
   
