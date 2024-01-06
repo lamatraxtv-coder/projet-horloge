@@ -12,7 +12,7 @@ int boutonDOWN = A2;
 int boutonENTER = A3;
 int LEDdecompteur;
 int alimmatrice = 0;
-int compteurmod = 1;
+int compteurmod = 1;  // (1) pour format 24 (2) pour format 12 
 int compteurflechemenu = 1;
 int nbOPT = 3;
 int verifreveil1 = 0;
@@ -20,12 +20,10 @@ int verifreveil2 = 0;
 int verifreveil3 = 0;
 int compteurreveilm = 0;
 int compteurreveilh = 0;
-int compteurreveilampm = 0;
+float compteurreveilampm = "am";
 
-<<<<<<< HEAD
 // pin buzzer au pif
 int pinBuzzer = 5;
-=======
 /* int pinBuzzer = 5 
 
 pinMode(pinBuzzer, OUTPUT)
@@ -57,7 +55,6 @@ if (compteurreveilm == affichageheurem)&&(compteurreveilh == affichagereveilh){
   }
 }
 */
->>>>>>> f1cfbd5960d1b65b64056439d0a34dc22c6efe56
 
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
 
@@ -209,17 +206,11 @@ void reveil24() {
       compteurreveilh = 23;
     }
 
-<<<<<<< HEAD
     display.println("heure de la sonnerie  ");
     display.print(compteurreveilh);
     display.print(":");
     display.println("00");
     display.println("appuye sur le bouton central pour selectionner l'heure");
-=======
-    display.println("heure de la sonnerie : ");
-    display.println(compteurreveilh, ":", "00");
-    display.println("appuyer sur le bouton central pour selectionner l'heure");
->>>>>>> f1cfbd5960d1b65b64056439d0a34dc22c6efe56
     display.display();
     delay(100);
     display.clearDisplay();
@@ -249,15 +240,10 @@ void reveil24() {
       compteurreveilm = 59;
     }
 
-<<<<<<< HEAD
     display.println("heure de la sonnerie : ");
     display.print(compteurreveilh);
     display.print(":");
     display.println(compteurreveilm);
-=======
-    display.println("Heure de la sonnerie : ");
-    display.println(compteurreveilh, ":", compteurreveilm);
->>>>>>> f1cfbd5960d1b65b64056439d0a34dc22c6efe56
     display.println("appuyer sur le bouton central pour selectionner l'heure");
     display.display();
     delay(100);
@@ -266,6 +252,8 @@ void reveil24() {
       verifreveil2=1;
     }
   }
+
+  if()
   verifreveil1 = 0;
   verifreveil2 = 0;
   loop();
