@@ -13,7 +13,7 @@ int boutonENTER = A3;
 
 int alimmatrice = 0;
 
-int compteurmod = 1;  // (1) pour format 24 (2) pour format 12 
+int compteurmod = 1;  // (1) pour format 24 (0) pour format 12 
 int compteurflechemenu = 1;
 int nbOPT = 3;
 
@@ -24,6 +24,7 @@ int verifreveil3 = 0;
 int compteurreveilm = 0;
 int compteurreveilh = 0;
 int compteurreveilampm = 0; // 0 pour AM 1 pour PM
+float etatampm;
 
 // pin buzzer au pif
 int pinBuzzer = 5;
@@ -61,17 +62,19 @@ if (compteurreveilm == affichageheurem)&&(compteurreveilh == affichagereveilh){
 
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
 
-// Function prototypes
+
 void marche_arret();
 void modeAMPM();
 void reveil24();
 void reveil12();
+int conversion1224();
+int conversion2412();
 
 void setup() {
   pinMode(boutonDOWN, INPUT);
   pinMode(boutonENTER, INPUT);
   pinMode(boutonUP, INPUT);
-  pinMode(LEDdecompteur, OUTPUT);
+
 
   Serial.begin(9600);
 
@@ -176,10 +179,18 @@ void modeAMPM() {
 
   if (compteurmod == 0) {
     compteurmod = 1;
-    display.println("Changement en format horaire de 12 h");
+    display.println("Changement en format horaire de 24 h");
+    if(compteurreveilm != 0 && compteurreveilh != 0){
+      conversion1224();
+    }
+
   } else {
     compteurmod = 0;
-    display.println("Changement en format horaire de 24 h");
+    display.println("Changement en format horaire de 12 h");
+    conversion2412();
+    if(compteurreveilm != 0 && compteurreveilh != 0){
+      conversion2412();
+    }
   }
 
   display.display();
@@ -255,14 +266,126 @@ void reveil24() {
       verifreveil2=1;
     }
   }
-
-  if()
   verifreveil1 = 0;
   verifreveil2 = 0;
   loop();
 }
 
 void reveil12() {
+  display.clearDisplay();
+  display.setCursor(0, 10);
 
-  
+  while (verifreveil1 == 0) {
+    display.setCursor(0, 10);
+    if (digitalRead(boutonUP) == HIGH) {
+      compteurreveilh++;
+    }
+
+    if (digitalRead(boutonDOWN) == HIGH) {
+      compteurreveilh--;
+    }
+
+    if (compteurreveilh > 12) {
+      compteurreveilh = 0;
+    }
+
+    if (compteurreveilh < 0) {
+      compteurreveilh = 12;
+    }
+
+    display.println("heure de la sonnerie  ");
+    display.print(compteurreveilh);
+    display.print(":");
+    display.print(compteurreveilm);
+    display.println(etatampm);
+    display.println("appuye sur le bouton central pour selectionner l'heure");
+    display.display();
+    delay(100);
+    display.clearDisplay();
+
+    if (digitalRead(boutonENTER) == HIGH) {
+      verifreveil1 = 1;
+    }
+  }
+
+  display.setCursor(0, 10);
+
+  while (verifreveil2 == 0) {
+    display.setCursor(0, 10);
+    if (digitalRead(boutonUP) == HIGH) {
+      compteurreveilm++;
+    }
+
+    if (digitalRead(boutonDOWN) == HIGH) {
+      compteurreveilm--;
+    }
+
+    if (compteurreveilm > 59) {
+      compteurreveilm = 0;
+    }
+
+    if (compteurreveilm < 0) {
+      compteurreveilm = 59;
+    }
+    display.println("heure de la sonnerie  ");
+    display.print(compteurreveilh);
+    display.print(":");
+    display.print(compteurreveilm);
+    display.println(etatampm);
+    display.println("appuye sur le bouton central pour selectionner l'heure");
+    display.display();
+    delay(100);
+    display.clearDisplay();
+    if(digitalRead(boutonENTER)==HIGH){
+      verifreveil2=1;
+    }
+  }
+  while(verifreveil3==0){
+
+    if (digitalRead(boutonUP) == HIGH) {
+      compteurreveilampm++;
+    }
+
+    if (digitalRead(boutonDOWN) == HIGH) {
+      compteurreveilampm--;
+    }
+
+    if (compteurreveilm >1) {
+      compteurreveilampm =  0;
+    }
+
+    if (compteurreveilm < 0) {
+      compteurreveilampm = 1;
+    }
+    if(compteurreveilampm == 0){
+      etatampm= 'am';
+    }
+    if(compteurreveilampm == 1){
+      etatampm ='pm';
+    }
+    display.println("heure de la sonnerie  ");
+    display.print(compteurreveilh);
+    display.print(":");
+    display.print(compteurreveilm  );
+    display.println(etatampm);
+    display.println("appuye sur le bouton central pour selectionner l'heure");
+    display.display();
+    delay(100);
+    display.clearDisplay();
+    if(digitalRead(boutonENTER)==HIGH){
+      verifreveil3 = 1;
+    }
+
+  }
+  verifreveil1 = 0;
+  verifreveil2 = 0;
+  verifreveil3 = 0;
+  loop();
 }
+int conversion1224(){
+
+}
+int conversion2412(){
+
+}
+  
