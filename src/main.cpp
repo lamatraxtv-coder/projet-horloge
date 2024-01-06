@@ -41,7 +41,6 @@ float etatampm;
 
 
 Ultrasonic ultrasonic(trigPin, echoPin);
-Adafruit_SSD1306 display(OLED_RESET);
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
 
 void marche_arret();
@@ -52,6 +51,7 @@ void conversion1224();
 void conversion2412();
 void affichertemps();
 void effacertemps();
+void startStopTimer(); 
 
 void setup() {
   pinMode(boutonDOWN, INPUT);
@@ -155,10 +155,10 @@ void loop() {
   if (compteurflechemenu == 3 && digitalRead(boutonENTER) == HIGH) {
     modeAMPM();
   }
-  if(compteurflechemenu == 4 && digitalRead(boutonEnter == HIGH)){
+  if(compteurflechemenu == 4 && digitalRead(boutonENTER) == HIGH){
     affichertemps();
   }
-  if(compteurflechemenu == 5 && digitalRead(boutonEnter == HIGH)){
+  if(compteurflechemenu == 5 && digitalRead(boutonENTER) == HIGH){
     effacertemps();
   }
 }
@@ -425,12 +425,6 @@ void effacertemps(){
   display.display();
   EEPROM.put(MEMORY_ADDRESS, 0); // Efface les données enregistrées dans la mémoire
 }
-
-////////////////////////////////////////////////////////////////////
-
-
-
-
 void startStopTimer() {
   if (!started) {
     started = true;
@@ -444,5 +438,12 @@ void startStopTimer() {
     EEPROM.put(MEMORY_ADDRESS, elapsedTime);
   }
 }
+
+////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
 
