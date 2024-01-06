@@ -10,17 +10,20 @@
 int boutonUP = A1;
 int boutonDOWN = A2;
 int boutonENTER = A3;
-int LEDdecompteur;
+
 int alimmatrice = 0;
+
 int compteurmod = 1;  // (1) pour format 24 (2) pour format 12 
 int compteurflechemenu = 1;
 int nbOPT = 3;
+
 int verifreveil1 = 0;
 int verifreveil2 = 0;
 int verifreveil3 = 0;
+
 int compteurreveilm = 0;
 int compteurreveilh = 0;
-float compteurreveilampm = "am";
+int compteurreveilampm = 0; // 0 pour AM 1 pour PM
 
 // pin buzzer au pif
 int pinBuzzer = 5;
