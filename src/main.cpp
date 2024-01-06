@@ -414,6 +414,8 @@ void affichertemps(){
   display.print(elapsedTime);
   display.println(" ms");
   display.display();
+  delay(5000);
+  loop();
 }
 
 void effacertemps(){
@@ -424,6 +426,8 @@ void effacertemps(){
   display.println("Temps effacé !");
   display.display();
   EEPROM.put(MEMORY_ADDRESS, 0); // Efface les données enregistrées dans la mémoire
+  delay(1000);
+  loop();
 }
 void startStopTimer() {
   if (!started) {
