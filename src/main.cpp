@@ -151,7 +151,6 @@ void loop() {
       reveil12();
     }
   }
-
   if (compteurflechemenu == 3 && digitalRead(boutonENTER) == HIGH) {
     modeAMPM();
   }
@@ -233,7 +232,7 @@ void reveil24() {
     display.println("heure de la sonnerie  ");
     display.print(compteurreveilh);
     display.print(":");
-    display.println("00");
+    display.println(compteurreveilm);
     display.println("appuye sur le bouton central pour selectionner l'heure");
     display.display();
     delay(100);
@@ -443,7 +442,6 @@ void startStopTimer() {
   }
 }
 
-////////////////////////////////////////////////////////////////////
 
 
 
