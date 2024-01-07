@@ -54,10 +54,12 @@ void effacertemps();
 void startStopTimer(); 
 
 void setup() {
+
   pinMode(boutonDOWN, INPUT);
   pinMode(boutonENTER, INPUT);
   pinMode(boutonUP, INPUT);
   pinMode(interruptPin, INPUT_PULLUP);
+  
   attachInterrupt(digitalPinToInterrupt(interruptPin), startStopTimer, CHANGE);
 
   Serial.begin(9600);
