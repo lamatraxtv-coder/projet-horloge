@@ -39,9 +39,6 @@ int compteurreveilh = 0;
 int compteurreveilampm = 0; // 0 pour AM 1 pour PM
 float etatampm;
 
-
-
-
 void marche_arret();
 void modeAMPM();
 void reveil24();
@@ -104,41 +101,41 @@ void loop() {
   display.setCursor(0, 10);
 
   if (compteurflechemenu == 1) {
-    display.println("->allumer // eteindre ");
-    display.println("  reveil");
-    display.println("  mode");
-    display.println("  Afficher temps");
-    display.println("  Effacer temps");
+    display.println(F("->allumer // eteindre "));
+    display.println(F("  reveil"));
+    display.println(F("  mode"));
+    display.println(F("  Afficher temps"));
+    display.println(F("  Effacer temps"));
   }
 
   if (compteurflechemenu == 2) {
-    display.println("  allumer // eteindre ");
-    display.println("->reveil");
-    display.println("  mode");
-    display.println("  Afficher temps");
-    display.println("  Effacer temps");
+    display.println(F("  allumer // eteindre "));
+    display.println(F("->reveil"));
+    display.println(F("  mode"));
+    display.println(F("  Afficher temps"));
+    display.println(F("  Effacer temps"));
   }
 
   if (compteurflechemenu == 3) {
-    display.println("  allumer // eteindre ");
-    display.println("  reveil");
-    display.println("->mode");
-    display.println("  Afficher temps");
-    display.println("  Effacer temps");
+    display.println(F("  allumer // eteindre "));
+    display.println(F("  reveil"));
+    display.println(F("->mode"));
+    display.println(F("  Afficher temps"));
+    display.println(F("  Effacer temps"));
   }
   if (compteurflechemenu == 4) {
-    display.println("  allumer // eteindre ");
-    display.println("  reveil");
-    display.println("  mode");
-    display.println("->Afficher temps");
-    display.println("  Effacer temps");
+    display.println(F("  allumer // eteindre "));
+    display.println(F("  reveil"));
+    display.println(F("  mode"));
+    display.println(F("->Afficher temps"));
+    display.println(F("  Effacer temps"));
   }
   if (compteurflechemenu == 5) {
-    display.println("  allumer // eteindre ");
-    display.println("  reveil");
-    display.println("  mode");
-    display.println("  Afficher temps");
-    display.println("->Effacer temps");
+    display.println(F("  allumer // eteindre "));
+    display.println(F("  reveil"));
+    display.println(F("  mode"));
+    display.println(F("  Afficher temps"));
+    display.println(F("->Effacer temps"));
   }
 
   display.display();
@@ -173,12 +170,12 @@ void marche_arret() {
 
   if (alimmatrice == 1) {
     alimmatrice = 0;
-    display.println("matrice eteinte");
+    display.println(F("matrice eteinte"));
     display.display();
     delay(5000);
   } else {
     alimmatrice = 1;
-    display.println("matrice allume");
+    display.println(F("matrice allume"));
     display.display();
     delay(5000);
   }
@@ -192,14 +189,14 @@ void modeAMPM() {
 
   if (compteurmod == 0) {
     compteurmod = 1;
-    display.println("Changement en format horaire de 24 h");
+    display.println(F("Changement en format horaire de 24 h"));
     if(compteurreveilm != 0 && compteurreveilh != 0){
       conversion1224();
     }
 
   } else {
     compteurmod = 0;
-    display.println("Changement en format horaire de 12 h");
+    display.println(F("Changement en format horaire de 12 h"));
     conversion2412();
     if(compteurreveilm != 0 && compteurreveilh != 0){
       conversion2412();
@@ -232,11 +229,11 @@ void reveil24() {
       compteurreveilh = 23;
     }
 
-    display.println("heure de la sonnerie  ");
+    display.println(F("heure de la sonnerie  "));
     display.print(compteurreveilh);
-    display.print(":");
-    display.println("00");
-    display.println("appuye sur le bouton central pour selectionner l'heure");
+    display.print(F(":"));
+    display.println(compteurreveilm);
+    display.println(F("appuye sur le bouton central pour selectionner l'heure"));
     display.display();
     delay(100);
     display.clearDisplay();
@@ -266,11 +263,11 @@ void reveil24() {
       compteurreveilm = 59;
     }
 
-    display.println("heure de la sonnerie : ");
+        display.println(F("heure de la sonnerie  "));
     display.print(compteurreveilh);
-    display.print(":");
+    display.print(F(":"));
     display.println(compteurreveilm);
-    display.println("appuyer sur le bouton central pour selectionner l'heure");
+    display.println(F("appuye sur le bouton central pour selectionner l'heure"));
     display.display();
     delay(100);
     display.clearDisplay();
@@ -304,12 +301,12 @@ void reveil12() {
       compteurreveilh = 12;
     }
 
-    display.println("heure de la sonnerie  ");
+    display.println(F("heure de la sonnerie  "));
     display.print(compteurreveilh);
-    display.print(":");
+    display.print(F(":"));
     display.print(compteurreveilm);
     display.println(etatampm);
-    display.println("appuye sur le bouton central pour selectionner l'heure");
+    display.println(F("appuye sur le bouton central pour selectionner l'heure"));
     display.display();
     delay(100);
     display.clearDisplay();
@@ -338,12 +335,12 @@ void reveil12() {
     if (compteurreveilm < 0) {
       compteurreveilm = 59;
     }
-    display.println("heure de la sonnerie  ");
+    display.println(F("heure de la sonnerie  "));
     display.print(compteurreveilh);
     display.print(":");
     display.print(compteurreveilm);
     display.println(etatampm);
-    display.println("appuye sur le bouton central pour selectionner l'heure");
+    display.println(F("appuye sur le bouton central pour selectionner l'heure"));
     display.display();
     delay(100);
     display.clearDisplay();
@@ -374,12 +371,12 @@ void reveil12() {
     if(compteurreveilampm == 1){
       etatampm ='pm';
     }
-    display.println("heure de la sonnerie  ");
+    display.println(F("heure de la sonnerie  "));
     display.print(compteurreveilh);
     display.print(":");
     display.print(compteurreveilm  );
     display.println(etatampm);
-    display.println("appuye sur le bouton central pour selectionner l'heure");
+    display.println(F("appuye sur le bouton central pour selectionner l'heure"));
     display.display();
     delay(100);
     display.clearDisplay();
