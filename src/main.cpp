@@ -40,8 +40,7 @@ int compteurreveilampm = 0; // 0 pour AM 1 pour PM
 float etatampm;
 
 
-Ultrasonic ultrasonic(trigPin, echoPin);
-Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
+
 
 void marche_arret();
 void modeAMPM();
@@ -52,6 +51,9 @@ void conversion2412();
 void affichertemps();
 void effacertemps();
 void startStopTimer(); 
+
+Ultrasonic ultrasonic(trigPin, echoPin);
+Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
 
 void setup() {
 
