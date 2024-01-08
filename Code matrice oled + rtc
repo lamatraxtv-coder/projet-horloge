@@ -1,0 +1,117 @@
+#include <Arduino.h>
+#include <RTClib.h>
+#include <SPI.h>
+#include <Wire.h>
+#include <LedControl.h>
+
+
+RTC_DS1307 rtc;
+
+LedControl lc=LedControl(11,13,10,4); // (din, clk, cs,  )
+
+void clignote(){
+  static boolean oui = HIGH;
+  byte deuxpoints[2] = {0, B00100100};
+  lc.setColumn(2,6,deuxpoints[oui]);
+  oui = !oui;
+  
+}
+
+void setup() {
+  Serial.begin(9600);
+  rtc.begin();
+  if (!rtc.isrunning()) {
+    Serial.println("RTC is NOT running!");
+    // following line sets the RTC to the date & time this sketch was compiled
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  }
+
+  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+ 
+  lc.shutdown(0,false);
+  /* Set the brightness to a medium values */
+  lc.setIntensity(0,8);
+  /* and clear the display */
+  lc.clearDisplay(0);
+
+    lc.shutdown(1,false);
+  /* Set the brightness to a medium values */
+  lc.setIntensity(1,8);
+  /* and clear the display */
+  lc.clearDisplay(1);
+
+  lc.shutdown(2,false);
+  /* Set the brightness to a medium values */
+  lc.setIntensity(2,8);
+  /* and clear the display */
+  lc.clearDisplay(2);
+
+  lc.shutdown(3,false);
+  /* Set the brightness to a medium values */
+  lc.setIntensity(3,8);
+  /* and clear the display */
+  lc.clearDisplay(3);
+
+ 
+  }
+
+
+
+
+
+void printnombre(int heure, int minute) {
+  byte tab[10][5] = {
+    {255, 129, 129, 129, 255},
+    {128, 128, 255, 130, 132},
+    {134, 137, 145, 161, 194},
+    {118, 137, 137, 129, 130},
+    {255, 8, 8, 8, 15},
+    {112, 137, 137, 137, 6},
+    {241, 145, 145, 145, 255},
+    {255, 17, 17, 17, 1},
+    {118, 137, 137, 137, 118},
+    {126, 137, 137, 137, 6}};
+
+
+for (int i = 0; i < 5; i++)
+{
+  lc.setColumn(0,i,tab[heure/10][i]);
+  lc.setColumn(1,i,tab[heure%10][i]);
+  lc.setColumn(2,i,tab[minute/10][i]);
+  lc.setColumn(3,i,tab[minute%10][i]);
+}
+
+}
+
+void reglerheure(){
+ 
+}
+int heurereveil = 0;
+int minutereveil = 0;
+
+void reglerreveil(){
+
+}
+
+
+void loop(){
+DateTime now = rtc.now();
+printnombre(now.hour(), now.minute());
+
+
+
+delay(10);
+
+
+/*Serial.print(now.hour());
+Serial.print(":");
+Serial.print(now.minute());
+Serial.print(":");
+Serial.println(now.second());
+delay(10);*/
+
+
+if(now.second()%2 == 0){
+clignote();}
+}
+

@@ -1,10 +1,15 @@
-#include <Arduino.h>
-#include <Adafruit_SSD1306.h>
-#include <Adafruit_GFX.h>
 #include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <EEPROM.h>
+#include <Ultrasonic.h>
+#include <Arduino.h>
 
+
+#define OLED_RESET 4
 #define largeurMENU 128
 #define hauteurMENU 64
+<<<<<<< HEAD
 
 /*à mettre sur la breadboard : un objet permettant de bloquer l'alim de la matrice 
 */
@@ -21,51 +26,85 @@ int verifreveil2=0;
 int compteurreveilm;
 int compteurreveilh;
 int compteurreveilampm;
+=======
+#define trigPin 11 // Broche de déclenchement du capteur à ultrasons
+#define echoPin 12 // Broche de réception du capteur à ultrasons
+#define interruptPin 2 // Broche d'interruption externe pour le bouton poussoir
+#define MEMORY_ADDRESS 0 // Adresse de départ dans la mémoire EEPROM pour enregistrer le temps
+>>>>>>> 1fb4b8c531d76a0184a21d76ee3cf51da2f74b62
 
 
-//declaration de l'écran connecté en I2C
-Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire,-1);
+volatile bool started = false;
+volatile unsigned long startTime = 0;
+volatile unsigned long stopTime = 0;
+volatile unsigned long elapsedTime = 0;
+
+int boutonUP = A1;
+int boutonDOWN = A2;
+int boutonENTER = A3;
+
+int alimmatrice = 0;
+
+int compteurmod = 1;  // (1) pour format 24 (0) pour format 12 
+int compteurflechemenu = 1;
+int nbOPT = 5;
+
+int verifreveil1 = 0;
+int verifreveil2 = 0;
+int verifreveil3 = 0;
+
+int compteurreveilm = 0;
+int compteurreveilh = 0;
+int compteurreveilampm = 0; // 0 pour AM 1 pour PM
+float etatampm;
 
 
-                                        ////////SETUP////////
-void setup(){
+Ultrasonic ultrasonic(trigPin, echoPin);
+Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
+
+void marche_arret();
+void modeAMPM();
+void reveil24();
+void reveil12();
+void conversion1224();
+void conversion2412();
+void affichertemps();
+void effacertemps();
+void startStopTimer(); 
+
+void setup() {
+
   pinMode(boutonDOWN, INPUT);
   pinMode(boutonENTER, INPUT);
   pinMode(boutonUP, INPUT);
-  pinMode(LEDdecompteur,OUTPUT);
-  Serial.begin(9600);                               //debut de l'afficheur serie
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)){     
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;);
-  }
-                               
-  display.setTextSize(1);                              //mode defaut du display
-  display.setTextColor(WHITE);
-  display.setCursor(0,10);
-  display.display();
-  display.clearDisplay();
-}
-
+  pinMode(interruptPin, INPUT_PULLUP);
   
-void modeAMPM(){
-  display.clearDisplay();
-  display.setCursor(0,10);
-  if (compteurmod == 0){
-    compteurmod = 1;
-    display.println("Changement en format horaire de 12 h");
+  attachInterrupt(digitalPinToInterrupt(interruptPin), startStopTimer, CHANGE);
+
+  Serial.begin(9600);
+
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for (;;)
+      ;
   }
-  else {
-    compteurmod = 0;
-    display.println("Changement en format horaire de 24 h");
-  }
+
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 10);
   display.display();
+<<<<<<< HEAD
   delay(5000);
   return loop();
+=======
+  display.clearDisplay();
+>>>>>>> 1fb4b8c531d76a0184a21d76ee3cf51da2f74b62
 }
 
+void loop() {
 
-void reveil(){
   display.clearDisplay();
+<<<<<<< HEAD
   display.setCursor(0,10);
   display.println("initialisation du reveil");
   delay(3000);
@@ -107,48 +146,380 @@ void loop(){
   //logic pour fleche sur display
   if(digitalRead(boutonUP) == HIGH){
     compteurflechemenu++;           //si on appuie sur le bouton up alors la fleche monte
+=======
+  if (digitalRead(boutonUP) == HIGH) {
+    compteurflechemenu++;
+>>>>>>> 1fb4b8c531d76a0184a21d76ee3cf51da2f74b62
     Serial.println("up");
   }
-  if(digitalRead(boutonDOWN) == HIGH){             //si on appuie sur le bouton down alors la fleche descend
+
+  if (digitalRead(boutonDOWN) == HIGH) {
     compteurflechemenu--;
     Serial.println("down");
   }
-  if(compteurflechemenu > nbOPT){     //si la fleche depasse le nb d'option elle retourne en haut de la selection
+
+  if (compteurflechemenu > nbOPT) {
     compteurflechemenu = 1;
   }
-  if(compteurflechemenu < 1){         // si la fleche tente de depasser la premiere option alors elle va à la derniere option
+
+  if (compteurflechemenu < 1) {
     compteurflechemenu = nbOPT;
   }
-  //affichage sur le display
-  display.clearDisplay(); 
-  display.setCursor(0,10);
 
-  if(compteurflechemenu==1){
-      display.println("->allumer // eteindre ");
-      display.println("  reveil");   
-      display.println("  mode");
+  display.clearDisplay();
+  display.setCursor(0, 10);
+
+  if (compteurflechemenu == 1) {
+    display.println("->allumer // eteindre ");
+    display.println("  reveil");
+    display.println("  mode");
+    display.println("  Afficher temps");
+    display.println("  Effacer temps");
   }
-  if(compteurflechemenu==2){
-      display.println("  allumer // eteindre ");
-      display.println("->reveil");   
-      display.println("  mode");
+
+  if (compteurflechemenu == 2) {
+    display.println("  allumer // eteindre ");
+    display.println("->reveil");
+    display.println("  mode");
+    display.println("  Afficher temps");
+    display.println("  Effacer temps");
   }
-  if(compteurflechemenu==3){
-      display.println("  allumer // eteindre ");
-      display.println("  reveil");   
-      display.println("->mode");
+
+  if (compteurflechemenu == 3) {
+    display.println("  allumer // eteindre ");
+    display.println("  reveil");
+    display.println("->mode");
+    display.println("  Afficher temps");
+    display.println("  Effacer temps");
+  }
+  if (compteurflechemenu == 4) {
+    display.println("  allumer // eteindre ");
+    display.println("  reveil");
+    display.println("  mode");
+    display.println("->Afficher temps");
+    display.println("  Effacer temps");
+  }
+  if (compteurflechemenu == 5) {
+    display.println("  allumer // eteindre ");
+    display.println("  reveil");
+    display.println("  mode");
+    display.println("  Afficher temps");
+    display.println("->Effacer temps");
   }
 
   display.display();
   delay(100);
 
-  if(compteurflechemenu==1 && digitalRead(boutonENTER) == HIGH){
-    marchearret();
+  if (compteurflechemenu == 1 && digitalRead(boutonENTER) == HIGH) {
+    marche_arret();
   }
-  if(compteurflechemenu==2 && digitalRead(boutonENTER) == HIGH){         //selection de choix sur le menu
-    reveil();
+
+  if (compteurflechemenu == 2 && digitalRead(boutonENTER) == HIGH) {
+    if (compteurmod == 1) {
+      reveil24();
+    } else {
+      reveil12();
+    }
   }
-  if(compteurflechemenu==3 && digitalRead(boutonENTER) == HIGH){
+
+  if (compteurflechemenu == 3 && digitalRead(boutonENTER) == HIGH) {
     modeAMPM();
   }
+<<<<<<< HEAD
+=======
+  if(compteurflechemenu == 4 && digitalRead(boutonENTER) == HIGH){
+    affichertemps();
+  }
+  if(compteurflechemenu == 5 && digitalRead(boutonENTER) == HIGH){
+    effacertemps();
+  }
+>>>>>>> 1fb4b8c531d76a0184a21d76ee3cf51da2f74b62
 }
+
+void marche_arret() {
+  display.clearDisplay();
+  display.setCursor(0, 10);
+
+  if (alimmatrice == 1) {
+    alimmatrice = 0;
+    display.println("matrice eteinte");
+    display.display();
+    delay(5000);
+  } else {
+    alimmatrice = 1;
+    display.println("matrice allume");
+    display.display();
+    delay(5000);
+  }
+
+  display.display();
+  loop();
+}
+
+void modeAMPM() {
+  display.clearDisplay();
+  display.setCursor(0, 10);
+
+  if (compteurmod == 0) {
+    compteurmod = 1;
+    display.println("Changement en format horaire de 24 h");
+    if(compteurreveilm != 0 && compteurreveilh != 0){
+      conversion1224();
+    }
+
+  } else {
+    compteurmod = 0;
+    display.println("Changement en format horaire de 12 h");
+    conversion2412();
+    if(compteurreveilm != 0 && compteurreveilh != 0){
+      conversion2412();
+    }
+  }
+
+  display.display();
+  delay(5000);
+  loop();
+}
+
+void reveil24() {
+  display.clearDisplay();
+  display.setCursor(0, 10);
+
+  while (verifreveil1 == 0) {
+    display.setCursor(0, 10);
+    if (digitalRead(boutonUP) == HIGH) {
+      compteurreveilh++;
+    }
+
+    if (digitalRead(boutonDOWN) == HIGH) {
+      compteurreveilh--;
+    }
+
+    if (compteurreveilh > 23) {
+      compteurreveilh = 0;
+    }
+
+    if (compteurreveilh < 0) {
+      compteurreveilh = 23;
+    }
+
+    display.println("heure de la sonnerie  ");
+    display.print(compteurreveilh);
+    display.print(":");
+    display.println("00");
+    display.println("appuye sur le bouton central pour selectionner l'heure");
+    display.display();
+    delay(100);
+    display.clearDisplay();
+
+    if (digitalRead(boutonENTER) == HIGH) {
+      verifreveil1 = 1;
+    }
+  }
+
+  display.setCursor(0, 10);
+
+  while (verifreveil2 == 0) {
+    display.setCursor(0, 10);
+    if (digitalRead(boutonUP) == HIGH) {
+      compteurreveilm++;
+    }
+
+    if (digitalRead(boutonDOWN) == HIGH) {
+      compteurreveilm--;
+    }
+
+    if (compteurreveilm > 59) {
+      compteurreveilm = 0;
+    }
+
+    if (compteurreveilm < 0) {
+      compteurreveilm = 59;
+    }
+
+    display.println("heure de la sonnerie : ");
+    display.print(compteurreveilh);
+    display.print(":");
+    display.println(compteurreveilm);
+    display.println("appuyer sur le bouton central pour selectionner l'heure");
+    display.display();
+    delay(100);
+    display.clearDisplay();
+    if(digitalRead(boutonENTER)==HIGH){
+      verifreveil2=1;
+    }
+  }
+  verifreveil1 = 0;
+  verifreveil2 = 0;
+  loop();
+}
+
+void reveil12() {
+  display.clearDisplay();
+  display.setCursor(0, 10);
+
+  while (verifreveil1 == 0) {
+    display.setCursor(0, 10);
+    if (digitalRead(boutonUP) == HIGH) {
+      compteurreveilh++;
+    }
+
+    if (digitalRead(boutonDOWN) == HIGH) {
+      compteurreveilh--;
+    }
+
+    if (compteurreveilh > 12) {
+      compteurreveilh = 0;
+    }
+
+    if (compteurreveilh < 0) {
+      compteurreveilh = 12;
+    }
+
+    display.println("heure de la sonnerie  ");
+    display.print(compteurreveilh);
+    display.print(":");
+    display.print(compteurreveilm);
+    display.println(etatampm);
+    display.println("appuye sur le bouton central pour selectionner l'heure");
+    display.display();
+    delay(100);
+    display.clearDisplay();
+
+    if (digitalRead(boutonENTER) == HIGH) {
+      verifreveil1 = 1;
+    }
+  }
+
+  display.setCursor(0, 10);
+
+  while (verifreveil2 == 0) {
+    display.setCursor(0, 10);
+    if (digitalRead(boutonUP) == HIGH) {
+      compteurreveilm++;
+    }
+
+    if (digitalRead(boutonDOWN) == HIGH) {
+      compteurreveilm--;
+    }
+
+    if (compteurreveilm > 59) {
+      compteurreveilm = 0;
+    }
+
+    if (compteurreveilm < 0) {
+      compteurreveilm = 59;
+    }
+    display.println("heure de la sonnerie  ");
+    display.print(compteurreveilh);
+    display.print(":");
+    display.print(compteurreveilm);
+    display.println(etatampm);
+    display.println("appuye sur le bouton central pour selectionner l'heure");
+    display.display();
+    delay(100);
+    display.clearDisplay();
+    if(digitalRead(boutonENTER)==HIGH){
+      verifreveil2=1;
+    }
+  }
+  while(verifreveil3==0){
+
+    if (digitalRead(boutonUP) == HIGH) {
+      compteurreveilampm++;
+    }
+
+    if (digitalRead(boutonDOWN) == HIGH) {
+      compteurreveilampm--;
+    }
+
+    if (compteurreveilm >1) {
+      compteurreveilampm =  0;
+    }
+
+    if (compteurreveilm < 0) {
+      compteurreveilampm = 1;
+    }
+    if(compteurreveilampm == 0){
+      etatampm= 'am';
+    }
+    if(compteurreveilampm == 1){
+      etatampm ='pm';
+    }
+    display.println("heure de la sonnerie  ");
+    display.print(compteurreveilh);
+    display.print(":");
+    display.print(compteurreveilm  );
+    display.println(etatampm);
+    display.println("appuye sur le bouton central pour selectionner l'heure");
+    display.display();
+    delay(100);
+    display.clearDisplay();
+    if(digitalRead(boutonENTER)==HIGH){
+      verifreveil3 = 1;
+    }
+
+  }
+  verifreveil1 = 0;
+  verifreveil2 = 0;
+  verifreveil3 = 0;
+  loop();
+}
+void conversion1224(){
+  if(compteurreveilampm == 1){
+    compteurreveilh += 12;
+  }
+}
+void conversion2412(){
+  if(compteurreveilh > 12){
+    compteurreveilh=-12;
+    compteurreveilampm = 1; 
+  }
+
+}
+void affichertemps(){
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println("Temps d'extinction:");
+  display.print("   ");
+  display.print(elapsedTime);
+  display.println(" ms");
+  display.display();
+  delay(5000);
+  loop();
+}
+
+void effacertemps(){
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println("Temps effacé !");
+  display.display();
+  EEPROM.put(MEMORY_ADDRESS, 0); // Efface les données enregistrées dans la mémoire
+  delay(1000);
+  loop();
+}
+void startStopTimer() {
+  if (!started) {
+    started = true;
+    startTime = millis(); // Démarre le chrono
+  } else {
+    stopTime = millis(); // Arrête le chrono
+    started = false;
+    elapsedTime = stopTime - startTime;
+
+    // Enregistrement dans la mémoire EEPROM
+    EEPROM.put(MEMORY_ADDRESS, elapsedTime);
+  }
+}
+
+
+
+
+
+
+
+
