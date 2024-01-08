@@ -46,6 +46,7 @@ void setup(){
   display.clearDisplay();
 }
 
+
   
 void modeAMPM(){
   display.clearDisplay();
@@ -64,42 +65,23 @@ void modeAMPM(){
 }
 
 
-void reveil(){
-  display.clearDisplay();
-  display.setCursor(0,10);
-  display.println("initialisation du reveil");
-  delay(3000);
-  display.clearDisplay();
-  display.println("heure : ");
-  while (verifreveil1==0){
-
-    display.print(compteurreveilm);
-
-    if(digitalRead(boutonUP)==HIGH){
-      compteurreveilm++;
-    }
-    if(digitalRead(boutonDOWN)==HIGH){
-      compteurreveilm--;
-    }
-    if(digitalRead(boutonENTER)==HIGH){
-      verifreveil1=1;
-    }
-  }
-  return loop();
-}
 
 void marchearret(){
   display.clearDisplay();
+  display.setCursor(0,10);
   if (alimmatrice==1){
     alimmatrice=0;
     display.println("matrice eteinte");
+    display.display();
     delay(5000);
   }
   else{
     alimmatrice=1;
-    display.println("matrice allumé");
+    display.println("matrice allume");
+    display.display();
     delay(5000);
   }
+  display.display();
   return loop();
 }
                                 ///////LOOP///////
@@ -145,9 +127,7 @@ void loop(){
   if(compteurflechemenu==1 && digitalRead(boutonENTER) == HIGH){
     marchearret();
   }
-  if(compteurflechemenu==2 && digitalRead(boutonENTER) == HIGH){         //selection de choix sur le menu
-    reveil();
-  }
+  
   if(compteurflechemenu==3 && digitalRead(boutonENTER) == HIGH){
     modeAMPM();
   }
