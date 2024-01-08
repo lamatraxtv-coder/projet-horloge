@@ -12,7 +12,7 @@ int boutonUP=A1;
 int boutonDOWN=A2;
 int boutonENTER=A3;
 int LEDdecompteur;
-int alimmatrice = HIGH;
+int alimmatrice = 0;// 0 si eteind 1 si allumé
 int compteurmod=1; // si = 1 0 à 23h si = 0 mode AM PM.
 int compteurflechemenu=1;
 int nbOPT=3;
@@ -21,7 +21,6 @@ int verifreveil2=0;
 int compteurreveilm;
 int compteurreveilh;
 int compteurreveilampm;
-int activationreveil=0;
 
 
 //declaration de l'écran connecté en I2C
@@ -61,7 +60,7 @@ void modeAMPM(){
   }
   display.display();
   delay(5000);
-  return;
+  return loop();
 }
 
 
@@ -72,14 +71,6 @@ void reveil(){
   delay(3000);
   display.clearDisplay();
   display.println("heure : ");
-  if(activationreveil==0){
-    activationreveil=1;
-  }
-  if(activationreveil==1){
-    activationreveil=0;
-    display.println("desactivation du reveil");
-    loop();
-  }
   while (verifreveil1==0){
 
     display.print(compteurreveilm);
@@ -94,22 +85,22 @@ void reveil(){
       verifreveil1=1;
     }
   }
-  return ;
+  return loop();
 }
 
 void marchearret(){
   display.clearDisplay();
-  if (alimmatrice==HIGH){
-    alimmatrice=LOW;
+  if (alimmatrice==1){
+    alimmatrice=0;
     display.println("matrice eteinte");
     delay(5000);
   }
   else{
-    alimmatrice=HIGH;
+    alimmatrice=1;
     display.println("matrice allumé");
     delay(5000);
   }
-  return ;
+  return loop();
 }
                                 ///////LOOP///////
 void loop(){
@@ -149,7 +140,7 @@ void loop(){
   }
 
   display.display();
-  delay(100); 
+  delay(100);
 
   if(compteurflechemenu==1 && digitalRead(boutonENTER) == HIGH){
     marchearret();
@@ -160,5 +151,4 @@ void loop(){
   if(compteurflechemenu==3 && digitalRead(boutonENTER) == HIGH){
     modeAMPM();
   }
-  delay(100);
 }
