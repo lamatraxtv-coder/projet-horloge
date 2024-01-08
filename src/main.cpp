@@ -184,7 +184,6 @@ void marche_arret() {
   }
 
   display.display();
-  loop();
 }
 
 void modeAMPM() {
@@ -209,7 +208,6 @@ void modeAMPM() {
 
   display.display();
   delay(5000);
-  loop();
 }
 
 void reveil24() {
@@ -282,7 +280,6 @@ void reveil24() {
   }
   verifreveil1 = 0;
   verifreveil2 = 0;
-  loop();
 }
 
 void reveil12() {
@@ -394,7 +391,6 @@ void reveil12() {
   verifreveil1 = 0;
   verifreveil2 = 0;
   verifreveil3 = 0;
-  loop();
 }
 void conversion1224(){
   if(compteurreveilampm == 1){
@@ -419,7 +415,6 @@ void affichertemps(){
   display.println(" ms");
   display.display();
   delay(5000);
-  loop();
 }
 
 void effacertemps(){
@@ -431,7 +426,6 @@ void effacertemps(){
   display.display();
   EEPROM.put(MEMORY_ADDRESS, 0); // Efface les données enregistrées dans la mémoire
   delay(1000);
-  loop();
 }
 void startStopTimer() {
   if (!started) {
