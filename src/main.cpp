@@ -215,8 +215,8 @@ void controledutemps(int &value, int minValue, int maxValue) {
 }
 
 void affichage() {
-  display.setTextSize(5);
-  display.println(F("heure de la sonnerie  "));
+  display.setTextSize(2);
+  display.println(F("reveil : "));
   display.print(compteurreveilh);
   display.print(F(":"));
   display.print(compteurreveilm);
