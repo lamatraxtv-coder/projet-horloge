@@ -39,13 +39,15 @@ int compteurreveilh = 0;
 int compteurreveilampm = 0; // 0 pour AM 1 pour PM
 float etatampm;
 
+int bouton_antireveil= A7;
+
 void marche_arret();
 void modeAMPM();
 void reveil24();
 void reveil12();
-/*void affichertemps();
+void affichertemps();
 void effacertemps();
-void startStopTimer();*/ 
+void startStopTimer();
 
 Ultrasonic ultrasonic(trigPin, echoPin);
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
@@ -55,9 +57,10 @@ void setup() {
   pinMode(boutonDOWN, INPUT);
   pinMode(boutonENTER, INPUT);
   pinMode(boutonUP, INPUT);
+  pinMode(bouton_antireveil, INPUT);
   pinMode(interruptPin, INPUT_PULLUP);
   
-  //attachInterrupt(digitalPinToInterrupt(interruptPin), startStopTimer, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(interruptPin), startStopTimer, CHANGE);
 
   Serial.begin(9600);
 
@@ -154,12 +157,12 @@ void loop() {
   if (compteurflechemenu == 3 && digitalRead(boutonENTER) == HIGH) {
     modeAMPM();
   }
-  /*if(compteurflechemenu == 4 && digitalRead(boutonENTER) == HIGH){
+  if(compteurflechemenu == 4 && digitalRead(boutonENTER) == HIGH){
     affichertemps();
   }
   if(compteurflechemenu == 5 && digitalRead(boutonENTER) == HIGH){
     effacertemps();
-  }*/
+  }
 }
 
 
@@ -171,12 +174,12 @@ void marche_arret() {
     alimmatrice = 0;
     display.println(F("matrice eteinte"));
     display.display();
-    delay(5000);
+    delay(2000);
   } else {
     alimmatrice = 1;
     display.println(F("matrice allume"));
     display.display();
-    delay(5000);
+    delay(2000);
   }
 
   display.display();
@@ -190,13 +193,15 @@ void modeAMPM() {
   compteurmod = 1 - compteurmod;  // Inversion de l'état
 
   display.print(F("Changement en format horaire de "));
-  display.println(compteurmod ? F("24 h") : F("12 h"));
+  display.println(compteurmod ? F("24 h") : F("12 h")); 
   compteurreveilm=0;
   compteurreveilh=0;
 
   display.display();
-  delay(5000);
+  delay(2000);
 }
+
+
 
 
 void controledutemps(int &value, int minValue, int maxValue) {
@@ -226,7 +231,7 @@ void affichage() {
   display.clearDisplay();
 }
 
-void configureAlarmTime(int &heures, int &minutes, int heureMax, int minuteMax, bool utiliserAmPm = false) {
+void configurationAlarme(int &heures, int &minutes, int heureMax, int minuteMax, bool utiliserAmPm = false) {
   display.clearDisplay();
   display.setCursor(0, 10);
 
@@ -238,6 +243,16 @@ void configureAlarmTime(int &heures, int &minutes, int heureMax, int minuteMax, 
     if (digitalRead(boutonENTER) == HIGH) {
       verifreveil1 = 1;
     }
+    if (digitalRead(bouton_antireveil) == HIGH){
+      display.clearDisplay();
+      display.print(F("annulation de l'alarme"));
+      display.display();
+      delay(1000);
+      compteurreveilh=-1;
+      compteurreveilm=-1;
+      compteurreveilampm=-1;
+      loop();
+    }
   }
 
   while (!verifreveil2) {
@@ -247,6 +262,17 @@ void configureAlarmTime(int &heures, int &minutes, int heureMax, int minuteMax, 
 
     if (digitalRead(boutonENTER) == HIGH) {
       verifreveil2 = 1;
+    }
+
+    if (digitalRead(bouton_antireveil)==HIGH){
+      display.clearDisplay();
+      display.print(F("annulation de l'alarme"));
+      display.display();
+      delay(1000);
+      compteurreveilh=-1;
+      compteurreveilm=-1;
+      compteurreveilampm=-1;
+      loop();
     }
   }
 
@@ -259,6 +285,16 @@ void configureAlarmTime(int &heures, int &minutes, int heureMax, int minuteMax, 
       if (digitalRead(boutonENTER) == HIGH) {
         verifreveil3 = 1;
       }
+      if (digitalRead(bouton_antireveil)==HIGH){
+        display.clearDisplay();
+        display.print(F("annulation de l'alarme"));
+        display.display();
+        delay(1000);
+        compteurreveilh=-1;
+        compteurreveilm=-1;
+        compteurreveilampm=-1;
+        loop();
+      }
     }
   }
 
@@ -268,9 +304,45 @@ void configureAlarmTime(int &heures, int &minutes, int heureMax, int minuteMax, 
 }
 
 void reveil24() {
-  configureAlarmTime(compteurreveilh, compteurreveilm, 23, 59);
+  configurationAlarme(compteurreveilh, compteurreveilm, 23, 59);
 }
 
 void reveil12() {
-  configureAlarmTime(compteurreveilh, compteurreveilm, 12, 59, true);
+  configurationAlarme(compteurreveilh, compteurreveilm, 12, 59, true);
+}
+void affichertemps(){
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println("Temps d'extinction:");
+  display.print("   ");
+  display.print(elapsedTime);
+  display.println(" ms");
+  display.display();
+  delay(1000);
+}
+
+void effacertemps(){
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println("Temps efface !");
+  display.display();
+  delay(1000);
+  EEPROM.put(MEMORY_ADDRESS, 0); // Efface les données enregistrées dans la mémoire
+}
+void startStopTimer() {
+  if (!started) {
+    started = true;
+    startTime = millis(); // Démarre le chrono
+  } else {
+    stopTime = millis(); // Arrête le chrono
+    started = false;
+    elapsedTime = stopTime - startTime;
+
+    // Enregistrement dans la mémoire EEPROM
+    EEPROM.put(MEMORY_ADDRESS, elapsedTime);
+  }
 }
