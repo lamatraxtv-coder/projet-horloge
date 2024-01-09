@@ -139,7 +139,7 @@ void loop() {
   }
 
   display.display();
-  delay(400);
+  delay(200);
 
   if (compteurflechemenu == 1 && digitalRead(boutonENTER) == HIGH) {
     marche_arret();
@@ -220,13 +220,13 @@ void affichage() {
   display.print(compteurreveilh);
   display.print(F(":"));
   display.print(compteurreveilm);
-  
-  if (compteurreveilampm == 0) {
-    display.println(F(" am"));
-  } else {
-    display.println(F(" pm"));
+  if(compteurmod==0){
+    if (compteurreveilampm == 0) {
+      display.println(F(" am"));
+    } else {
+      display.println(F(" pm"));
+    }
   }
-
   display.display();
   delay(100);
   display.clearDisplay();
