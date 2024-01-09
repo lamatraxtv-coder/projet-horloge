@@ -1,8 +1,8 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+#include <Adafruit_SSD1306.h>       //biblio utilisé
 #include <EEPROM.h>
-#include <Ultrasonic.h>
+//#include <Ultrasonic.h>
 #include <Arduino.h>
 
 
@@ -21,58 +21,56 @@ volatile unsigned long stopTime = 0;
 volatile unsigned long elapsedTime = 0;
 
 int boutonUP = A1;
-int boutonDOWN = A2;
+int boutonDOWN = A2;      //bouton pour le controle
 int boutonENTER = A3;
 
-int alimmatrice = 0;
+int alimmatrice = 0;      // alimentation de la matrice
 
 int compteurmod = 1;  // (1) pour format 24 (0) pour format 12 
-int compteurflechemenu = 1;
-int nbOPT = 5;
+int compteurflechemenu = 1;   // compteur pour savoir ou est la fleche
+int nbOPT = 5;            // nb option dans le menu
 
-int verifreveil1 = 0;
+int verifreveil1 = 0;       // verification pour les boucle de reveil
 int verifreveil2 = 0;
 int verifreveil3 = 0;
 
-int compteurreveilm = 0;
-int compteurreveilh = 0;
+int compteurreveilm = 0;     
+int compteurreveilh = 0;      // pour le reveil
 int compteurreveilampm = 0; // 0 pour AM 1 pour PM
-float etatampm;
+float etatampm;           
 
-int bouton_antireveil= A7;
 
 void marche_arret();
 void modeAMPM();
-void reveil24();
+void reveil24();      // prototype des fonction
 void reveil12();
 void affichertemps();
 void effacertemps();
 void startStopTimer();
 
-Ultrasonic ultrasonic(trigPin, echoPin);
+//Ultrasonic ultrasonic(trigPin, echoPin);
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
 
 void setup() {
 
   pinMode(boutonDOWN, INPUT);
-  pinMode(boutonENTER, INPUT);
+  pinMode(boutonENTER, INPUT);      // fonction des action 
   pinMode(boutonUP, INPUT);
-  pinMode(bouton_antireveil, INPUT);
   pinMode(interruptPin, INPUT_PULLUP);
   
-  attachInterrupt(digitalPinToInterrupt(interruptPin), startStopTimer, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(interruptPin), startStopTimer, CHANGE);   // fonction d'interruption
 
   Serial.begin(9600);
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    Serial.println(F("SSD1306 allocation failed"));
+    Serial.println(F("SSD1306 allocation failed"));     // message qui capte un changement
     for (;;)
       ;
   }
 
   display.setTextSize(1);
   display.setTextColor(WHITE);
-  display.setCursor(0, 10);
+  display.setCursor(0, 10);// initialisation du display
   display.display();
   display.clearDisplay();
 }
@@ -100,6 +98,7 @@ void loop() {
 
   display.clearDisplay();
   display.setCursor(0, 10);
+  display.setTextSize(1);
 
   if (compteurflechemenu == 1) {
     display.println(F("->allumer // eteindre "));
@@ -194,7 +193,7 @@ void modeAMPM() {
 
   display.print(F("Changement en format horaire de "));
   display.println(compteurmod ? F("24 h") : F("12 h"));
-  display.println(" + réinitialisation de l'heure")
+  display.println(" + réinitialisation de l'heure");
   compteurreveilm=-1;
   compteurreveilh=-1;
 
@@ -216,6 +215,7 @@ void controledutemps(int &value, int minValue, int maxValue) {
 }
 
 void affichage() {
+  display.setTextSize(5);
   display.println(F("heure de la sonnerie  "));
   display.print(compteurreveilh);
   display.print(F(":"));
@@ -243,16 +243,6 @@ void configurationAlarme(int &heures, int &minutes, int heureMax, int minuteMax,
 
     if (digitalRead(boutonENTER) == HIGH) {
       verifreveil1 = 1;
-    }
-    if (digitalRead(bouton_antireveil) == HIGH){
-      display.clearDisplay();
-      display.print(F("annulation de l'alarme"));
-      display.display();
-      delay(1000);
-      compteurreveilh=-1;
-      compteurreveilm=-1;
-      compteurreveilampm=-1;
-      loop();
     }
   }
 
