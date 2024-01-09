@@ -75,7 +75,7 @@ void setup() {
   display.clearDisplay();
 }
 
-void loop() {
+void loop() {               
 
   display.clearDisplay();
   if (digitalRead(boutonUP) == HIGH) {
@@ -139,7 +139,7 @@ void loop() {
   }
 
   display.display();
-  delay(100);
+  delay(400);
 
   if (compteurflechemenu == 1 && digitalRead(boutonENTER) == HIGH) {
     marche_arret();
