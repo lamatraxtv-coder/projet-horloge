@@ -193,9 +193,10 @@ void modeAMPM() {
   compteurmod = 1 - compteurmod;  // Inversion de l'état
 
   display.print(F("Changement en format horaire de "));
-  display.println(compteurmod ? F("24 h") : F("12 h")); 
-  compteurreveilm=0;
-  compteurreveilh=0;
+  display.println(compteurmod ? F("24 h") : F("12 h"));
+  display.println(" + réinitialisation de l'heure")
+  compteurreveilm=-1;
+  compteurreveilh=-1;
 
   display.display();
   delay(2000);
@@ -263,17 +264,6 @@ void configurationAlarme(int &heures, int &minutes, int heureMax, int minuteMax,
     if (digitalRead(boutonENTER) == HIGH) {
       verifreveil2 = 1;
     }
-
-    if (digitalRead(bouton_antireveil)==HIGH){
-      display.clearDisplay();
-      display.print(F("annulation de l'alarme"));
-      display.display();
-      delay(1000);
-      compteurreveilh=-1;
-      compteurreveilm=-1;
-      compteurreveilampm=-1;
-      loop();
-    }
   }
 
   if (utiliserAmPm) {
@@ -285,16 +275,7 @@ void configurationAlarme(int &heures, int &minutes, int heureMax, int minuteMax,
       if (digitalRead(boutonENTER) == HIGH) {
         verifreveil3 = 1;
       }
-      if (digitalRead(bouton_antireveil)==HIGH){
-        display.clearDisplay();
-        display.print(F("annulation de l'alarme"));
-        display.display();
-        delay(1000);
-        compteurreveilh=-1;
-        compteurreveilm=-1;
-        compteurreveilampm=-1;
-        loop();
-      }
+
     }
   }
 
