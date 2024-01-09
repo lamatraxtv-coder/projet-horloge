@@ -104,7 +104,7 @@ void loop() {
   if (compteurflechemenu == 1) {
     display.println(F("->allumer // eteindre "));
     display.println(F("  reveil"));
-    display.println(F("  mode"));
+    display.println(F("  mode //renit reveil"));
     display.println(F("  Afficher temps"));
     display.println(F("  Effacer temps"));
   }
@@ -112,7 +112,7 @@ void loop() {
   if (compteurflechemenu == 2) {
     display.println(F("  allumer // eteindre "));
     display.println(F("->reveil"));
-    display.println(F("  mode"));
+    display.println(F("  mode //renit reveil"));
     display.println(F("  Afficher temps"));
     display.println(F("  Effacer temps"));
   }
@@ -120,21 +120,21 @@ void loop() {
   if (compteurflechemenu == 3) {
     display.println(F("  allumer // eteindre "));
     display.println(F("  reveil"));
-    display.println(F("->mode"));
+    display.println(F("->mode //renit reveil"));
     display.println(F("  Afficher temps"));
     display.println(F("  Effacer temps"));
   }
   if (compteurflechemenu == 4) {
     display.println(F("  allumer // eteindre "));
     display.println(F("  reveil"));
-    display.println(F("  mode"));
+    display.println(F("  mode //renit reveil"));
     display.println(F("->Afficher temps"));
     display.println(F("  Effacer temps"));
   }
   if (compteurflechemenu == 5) {
     display.println(F("  allumer // eteindre "));
     display.println(F("  reveil"));
-    display.println(F("  mode"));
+    display.println(F("  mode //renit reveil"));
     display.println(F("  Afficher temps"));
     display.println(F("->Effacer temps"));
   }
