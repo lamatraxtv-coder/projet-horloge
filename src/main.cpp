@@ -194,8 +194,8 @@ void modeAMPM() {
   display.print(F("Changement en format horaire de "));
   display.println(compteurmod ? F("24 h") : F("12 h"));
   display.println(" + réinitialisation de l'heure");
-  compteurreveilm=-1;
-  compteurreveilh=-1;
+  compteurreveilm=0;
+  compteurreveilh=0;
 
   display.display();
   delay(2000);
