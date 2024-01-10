@@ -1,14 +1,10 @@
-#include <Arduino.h>
-#include <RTClib.h>
-#include <Adafruit_GFX.h>
-#include <SPI.h>
 #include <Wire.h>
-#include <LedControl.h>
-#include <Encoder.h>
-#include <Adafruit_SSD1306.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>       //biblio utilisé
+#include <EEPROM.h>
+//#include <Ultrasonic.h>
+#include <Arduino.h>
 
-#define encoderPinA 2  // Broche A de l'encodeur connectée à la broche 2 de l'Arduino
-#define encoderPinB 3  // Broche B de l'encodeur connectée à la broche 3 de l'Arduino
 
 #define OLED_RESET 4
 #define largeurMENU 128
@@ -17,6 +13,7 @@
 #define echoPin 12 // Broche de réception du capteur à ultrasons
 #define interruptPin 2 // Broche d'interruption externe pour le bouton poussoir
 #define MEMORY_ADDRESS 0 // Adresse de départ dans la mémoire EEPROM pour enregistrer le temps
+
 
 volatile bool started = false;
 volatile unsigned long startTime = 0;
@@ -40,7 +37,8 @@ int verifreveil3 = 0;
 int compteurreveilm = 0;     
 int compteurreveilh = 0;      // pour le reveil
 int compteurreveilampm = 0; // 0 pour AM 1 pour PM
-float etatampm; 
+float etatampm;           
+
 
 void marche_arret();
 void modeAMPM();
@@ -53,47 +51,7 @@ void startStopTimer();
 //Ultrasonic ultrasonic(trigPin, echoPin);
 Adafruit_SSD1306 display(largeurMENU, hauteurMENU, &Wire, -1);
 
-Encoder myEncoder(encoderPinA, encoderPinB);
-
-
-RTC_DS1307 rtc;
-LedControl lc=LedControl(11,13,10,4); // (din, clk, cs)
-
 void setup() {
-  Serial.begin(9600);
-
-  rtc.begin();
-  if (!rtc.isrunning()) {
-    Serial.println("RTC is NOT running!");
-    // following line sets the RTC to the date & time this sketch was compiled
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-  }
-
-  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
- 
-  lc.shutdown(0,false);
-  /* Set the brightness to a medium values */
-  lc.setIntensity(0,8);
-  /* and clear the display */
-  lc.clearDisplay(0);
-
-    lc.shutdown(1,false);
-  /* Set the brightness to a medium values */
-  lc.setIntensity(1,8);
-  /* and clear the display */
-  lc.clearDisplay(1);
-
-  lc.shutdown(2,false);
-  /* Set the brightness to a medium values */
-  lc.setIntensity(2,8);
-  /* and clear the display */
-  lc.clearDisplay(2);
-
-  lc.shutdown(3,false);
-  /* Set the brightness to a medium values */
-  lc.setIntensity(3,8);
-  /* and clear the display */
-  lc.clearDisplay(3);
 
   pinMode(boutonDOWN, INPUT);
   pinMode(boutonENTER, INPUT);      // fonction des action 
@@ -111,76 +69,13 @@ void setup() {
   }
 
   display.setTextSize(1);
+  display.setTextColor(WHITE);
   display.setCursor(0, 10);// initialisation du display
   display.display();
   display.clearDisplay();
 }
 
-void clignote(){
-  static boolean oui = HIGH;
-  byte deuxpoints[2] = {0, B00100100};
-  lc.setColumn(2,6,deuxpoints[oui]);
-  oui = !oui;
-  
-}
-
-void printnombre(int heure, int minute) {
-  byte tab[10][5] = {
-    {255, 129, 129, 129, 255},
-    {128, 128, 255, 130, 132},
-    {134, 137, 145, 161, 194},
-    {118, 137, 137, 129, 130},
-    {255, 8, 8, 8, 15},
-    {112, 137, 137, 137, 6},
-    {241, 145, 145, 145, 255},
-    {255, 17, 17, 17, 1},
-    {118, 137, 137, 137, 118},
-    {126, 137, 137, 137, 6}};
-
-
-for (int i = 0; i < 5; i++)
-{
-  lc.setColumn(0,i,tab[heure/10][i]);
-  lc.setColumn(1,i,tab[heure%10][i]);
-  lc.setColumn(2,i,tab[minute/10][i]);
-  lc.setColumn(3,i,tab[minute%10][i]);
-}
-
-}
-
 void loop() {               
-
-  static long oldPosition = -999;
-
-  long newPosition = myEncoder.read();
-  if (newPosition != oldPosition) {
-      // Map la plage de l'encodeur (par exemple, 0 à 1000) à la plage de degrés souhaitée (par exemple, 0 à 360).
-      int degrees = map(newPosition, 0, 1000, 0, 360);
-
-      Serial.print("Rotation en degrés: ");
-      Serial.println(degrees);
-      oldPosition = newPosition;
-  }
-
-
-  DateTime now = rtc.now();
-  printnombre(now.hour(), now.minute());
-
-
-
-  /*Serial.print(now.hour());
-  Serial.print(":");
-  Serial.print(now.minute());
-  Serial.print(":");
-  Serial.println(now.second());
-  delay(10);*/
-
-
-  if(now.second()%2 == 0){
-  clignote();
-  }
-
-
 
   display.clearDisplay();
   if (digitalRead(boutonUP) == HIGH) {
@@ -244,7 +139,7 @@ void loop() {
   }
 
   display.display();
-  delay(200);
+  delay(100);
 
   if (compteurflechemenu == 1 && digitalRead(boutonENTER) == HIGH) {
     marche_arret();
